@@ -24,6 +24,6 @@ Once you have the protbuf compiler, download the proto files, unzip the folder a
     protoc --python_out=.. proto_cloud_token_config.proto
     protoc --python_out=.. proto_config.proto
     protoc --python_out=.. proto_device_info.proto
-     protoc --python_out=.. proto_nvstore.proto
+    protoc --python_out=.. proto_nvstore.proto
     protoc --python_out=.. proto_rule.proto
     
