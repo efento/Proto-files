@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+enum ModemType
+{
+  MODEM_TYPE_UNSPECIFIED = 0;
+  MODEM_TYPE_BC66 = 1;
+  MODEM_TYPE_BC66NA = 2;
+}
+
+message ProtoRuntime
+{
+
+  /* Up-time in seconds (since reset)                                                                                           */
+  uint32 up_time = 1;
+
+  /* Message counters (since reset). There are 3 counters:                                                                      */
+  /*   message_counters[0]: counter of confirmable messages attempts                                                            */
+  /*   message_counters[1]: counter of non-confirmable messages attempts                                                        */
+  /*   message_counters[2]: counter of succeeded messages                                                                       */
+  repeated uint32 message_counters = 2;
+
+  /* MCU temperature in Celsius                                                                                                 */
+  sint32 mcu_temperature = 3;
+
+  /* Minimum battery voltage in mV                                                                                              */
+  uint32 min_battery_voltage = 4;
+
+  /* MCU temperature in Celsius, while the minimum battery voltage was reached                                                  */
+  sint32 min_battery_mcu_temperature = 5;
+
+  /* Battery reset timestamp (Unix timestamp)                                                                                   */
+  uint32 battery_reset_timestamp = 6;
+
+  /* Max MCU temperature in Celsius                                                                                             */
+  sint32 max_mcu_temperature = 7;
+
+  /* Min MCU temperature in Celsius                                                                                             */
+  sint32 min_mcu_temperature = 8;
+}
+
+message ProtoModem
+{
+
+  ModemType type = 1;
+
+  /* Parameters for BC66 modem:                                                                                                 */
+  /* parameters[0] - sc_EARFCN. Range: [0 : 262143] Unknown value : -1                                                          */
+  /* parameters[1] - sc_EARNFCN_offset. Range: [0 : 4] mapped to [-2, -1, -0.5, 0, 1] Unknown value : -1                        */
+  /* parameters[2] - sc_PCI. Range: [0 : 502] Unknown value : -1                                                                */
+  /* parameters[3] - sc_Cell id. Range: [1 : 268435456] Unknown value : 0                                                       */
+  /* parameters[4] - sc_RSRP[dBm]. Range: [-140 : -44] Unknown value : 0                                                        */
+  /* parameters[5] - sc_RSRQ[dB]. Range: [-20 : -3] Unknown value : 0                                                           */
+  /* parameters[6] - sc_RSSI[dBm] Range: [-110 : -3] Unknown value : 0                                                          */
+  /* parameters[7] - sc_SINR[dB]. Range: [-10 : 30] Unknown value : 31                                                          */
+  /* parameters[8] - sc_Band. Range: [see module supported bands] The current serving cell band. Unknown value : -1             */
+  /* parameters[9] - sc_TAC - Range: [0:65536] Unknown value : -1                                                               */
+  /* parameters[10] - sc_ECL - Range: [0 : 2] Unknown value : -1                                                                */
+  /* parameters[11] - sc_TX_PWR - [0.1cBm] Range [-440:230]. Unknown value : -1000                                              */
+  /* parameters[12] - OP_MODE - Range: [0 : 3]. Unknown value : -1                                                              */
+  /* parameters[13] - nc_EARFCN. Range: [0 : 262143]. Unknown value : -1                                                        */
+  /* parameters[14] - nc_EARNFCN_offset. Range: [0:4] mapped to [-2, -1, -0.5, 0, 1]. Unknown value : -1                        */
+  /* parameters[15] - nc_PCI. Range: [0 : 502]. Unknown value : -1                                                              */
+  /* parameters[16] - nc_RSRP[dBm]. Range: [-140 : -44]. Unknown value : 0                                                      */
+  /* parameters[17] - RLC_UL_BLER - range from 0 to 100. Unknown value : -1                                                     */
+  /* parameters[18] - RLC_DL_BLER - range from 0 to 100. Unknown value : -1                                                     */
+  /* parameters[19] - MAC_UL_BLER - range from 0 to 100. Unknown value : -1                                                     */
+  /* parameters[20] - MAC_DL_BLER - range from 0 to 100. Unknown value : -1                                                     */
+  /* parameters[21] - MAC_UL_TOTAL_BYTES - Range: [0:2147483647] Unknown value : -1                                             */
+  /* parameters[22] - MAC_DL_TOTAL_BYTES - Range: [0:2147483647] Unknown value : -1                                             */
+  /* parameters[23] - MAC_UL_total_HARQ_Tx - Range: [0:2147483647] Unknown value : -1                                           */
+  /* parameters[24] - MAC_DL_total_HARQ_Tx - Range: [0:2147483647] Unknown value : -1                                           */
+  /* parameters[25] - MAC_UL_HARQ_re_Tx - Range: [0:2147483647] Unknown value : -1                                              */
+  /* parameters[26] - MAC_DL_HARQ_re_Tx - Range: [0:2147483647] Unknown value : -1                                              */
+  /* parameters[27] - RLC_UL_tput - Range: [0:2147483647] Unknown value : -1                                                    */
+  /* parameters[28] - RLC_DL_tput - Range: [0:2147483647] Unknown value : -1                                                    */
+  /* parameters[29] - MAC_UL_tput - Range: [0:2147483647] Unknown value : -1                                                    */
+  /* parameters[30] - MAC_DL_tput - Range: [0:2147483647] Unknown value : -1                                                    */
+  /* parameters[31] - sleep_duration [0.1s] - Range: [0-2147483647] Unknown value : -1                                          */
+  /* parameters[32] - Rx_time [0.1s] - Range: [0-2147483647] Unknown value : -1                                                 */
+  /* parameters[33] - Tx_time [0.1s]- Range: [0-2147483647] Unknown value : -1                                                  */
+  repeated sint32 parameters = 2;
+}
+
+message ProtoDeviceInfo
+{
+
+  /* Serial number of device                                                                                                    */
+  bytes serial_num = 1;
+
+  /* Deprecated field                                                                                                           */
+  reserved 2;
+
+  /* Software version e.g ver 06.00 -> 0x0600 -> 1536                                                                           */
+  uint32 sw_version = 3;
+
+  /* Deprecated fields                                                                                                          */
+  reserved 4,5,6,7,8,9,10,11,12;
+
+  /* Structure with battery and temperature informations                                                                        */
+  ProtoRuntime runtime_info = 13;
+
+  /* Structure with modem specific runtime informations                                                                         */
+  ProtoModem modem = 14;
+
+  /* String up to 7 bytes long. Software commit id e.g. "e0e8556"                                                               */
+  string commit_id = 15;
+
+  /* Optional string up to 36 bytes long. Can be set to any user define value or hold device's IMEI                             */
+  string cloud_token = 16;
+}

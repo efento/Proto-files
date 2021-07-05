@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+enum MeasurementType {
+
+  /* [] - No sensor on the channel                                                                                              */
+  MEASUREMENT_TYPE_NO_SENSOR = 0;
+
+  /* [°C] - Celsius degree. Resolution 0.1°C. Range [-273.2:4000.0]. Type: Continuous                                           */
+  MEASUREMENT_TYPE_TEMPERATURE = 1;
+
+  /* [% RH] - Relative humidity. Resolution 1%. Range [0:100]. Type: Continuous                                                 */
+  MEASUREMENT_TYPE_HUMIDITY = 2;
+
+  /* [hPa] - Hectopascal (1hPa = 100Pa). Resolution 0.1hPa. Range: [1.0:2000.0]. Atmospheric pressure. Type: Continuous         */
+  MEASUREMENT_TYPE_ATMOSPHERIC_PRESSURE = 3;
+
+  /* [Pa] - Pascal. Resolution 1Pa. Range [-10000:10000]. Differential pressure. Type: Continuous                               */
+  MEASUREMENT_TYPE_DIFFERENTIAL_PRESSURE = 4;
+
+  /* Sign indicates state: (+) ALARM, (-) OK. Type: Binary                                                                      */
+  MEASUREMENT_TYPE_OK_ALARM = 5;
+
+  /* [IAQ] - Iaq index. Resolution 1IAQ. Range [0:500]. To get IAQ index the value should be divided by 3.                      */
+  /* Sensor return also calibration status as metadata (is the remainder when the absolute value is divided by 3):              */
+  /*   - 0: Calibration required (sensor returns not accurate values)                                                           */
+  /*   - 1: Calibration on-going (sensor returns not accurate values)                                                           */
+  /*   - 2: Calibration done (best accuracy of IAQ sensor)                                                                      */
+  /* Type: Continuous                                                                                                           */
+  MEASUREMENT_TYPE_IAQ = 6;
+
+  /* Sign indicates water presence: (+) water not detected, (-) water detected. Type: Binary                                    */
+  MEASUREMENT_TYPE_FLOODING = 7;
+
+  /* [NB] Number of pulses. Resolution 1 pulse. Range [0:8000000]. Type: Continuous                                             */
+  MEASUREMENT_TYPE_PULSE_CNT = 8;
+
+  /* [Wh] - Watthour; Resolution 1Wh. Range [0:8000000]. Number of Watthours in a single period. Type: Continuous               */
+  MEASUREMENT_TYPE_ELECTRICITY_METER = 9;
+
+  /* [l] - Liter. Resolution 1l. Range [0:8000000]. Number of litres in a single period. Type: Continuous                       */
+  MEASUREMENT_TYPE_WATER_METER = 10;
+
+  /* [kPa] - Kilopascal (1kPa = 1000Pa); Resolution 1kPa. Range [-1000:0]. Soil moisture (tension). Type: Continuous            */
+  MEASUREMENT_TYPE_SOIL_MOISTURE = 11;
+
+  /* [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon monoxide concentration. Type: Continuous             */
+  MEASUREMENT_TYPE_CO_GAS = 12;
+
+  /* [ppm] - Parts per million. Resolution 1.0ppm. Range [0:1000000]. Nitrogen dioxide concentration. Type: Continuous          */
+  MEASUREMENT_TYPE_NO2_GAS = 13;
+
+  /* [ppm] - Parts per million. Resolution 0.01ppm. Range [0.00:80000.00]. Hydrogen sulfide concentration. Type: Continuous     */
+  MEASUREMENT_TYPE_H2S_GAS = 14;
+
+  /* [lx] - Lux. Resolution 0.1lx. Range [0.0:100000.0]. Illuminance. Type: Continuous                                          */
+  MEASUREMENT_TYPE_AMBIENT_LIGHT = 15;
+
+  /* [µg/m^3] - Micro gram per cubic meter. Resolution 1µg/m^3. Range [0:1000].                                                 */
+  /* Particles with an aerodynamic diameter less than 1 micrometer. Type: Continuous                                            */
+  MEASUREMENT_TYPE_PM_1_0 = 16;
+
+  /* [µg/m^3] - Micro gram per cubic meter. Resolution 1µg/m^3. Range [0:1000].                                                 */
+  /* Particles with an aerodynamic diameter less than 2.5 micrometers. Type: Continuous                                         */
+  MEASUREMENT_TYPE_PM_2_5 = 17;
+
+  /* [µg/m^3] - Micro gram per cubic meter. Resolution 1µg/m^3. Range [0:1000].                                                 */
+  /* Particles with an aerodynamic diameter less than 10 micrometers. Type: Continuous                                          */
+  MEASUREMENT_TYPE_PM_10_0 = 18;
+
+  /* [dB] - Decibels. Resolution 0.1 dB. Range: [0.0:200.0]. Noise level. Type: Continuous                                      */
+  MEASUREMENT_TYPE_NOISE_LEVEL = 19;
+
+  /* [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Ammonia concentration. Type: Continuous                     */
+  MEASUREMENT_TYPE_NH3_GAS = 20;
+
+  /* [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Methane concentration. Type: Continuous                     */
+  MEASUREMENT_TYPE_CH4_GAS = 21;
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+message ProtoChannelDescriptor {
+
+  /* Reference point (start point) for the channel                                                                              */
+  sint32 start_point = 1;
+
+  /* Number of samples for the channel                                                                                          */
+  uint32 samples_count = 2;
+}
+
+message ProtoNvStore {
+
+  /* Samples descriptors (per channel)                                                                                          */
+  repeated ProtoChannelDescriptor channel_descriptors = 1;
+
+  /* Offsets of samples from the start point (all channels)                                                                     */
+  repeated sint32 sample_offsets = 2 [packed=true];
+}

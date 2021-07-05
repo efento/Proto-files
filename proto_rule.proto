@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+/* Encoding A: used to set absolute values in the Rules (e.g. upper and lower threshold values)                                 */
+/*  - TEMPERATURE - [°C] - Celsius degree. Resolution 0.1°C. Range [-273.2:4000.0].                                             */
+/*  - HUMIDITY - [% RH] - Relative humidity. Resolution 1%. Range [0:100].                                                      */
+/*  - ATMOSPHERIC_PRESSURE - [hPa] - Hectopascal (1hPa = 100Pa). Resolution 0.1hPa. Range: [1.0:2000.0].                        */
+/*  - DIFERENTIAL_PRESSURE - [Pa] - Pascal. Resolution 1Pa. Range [-10000:10000]                                                */
+/*  - OK/ALARM - Not applicable                                                                                                 */
+/*  - VOC - [IAQ] - Iaq index. Resolution 1IAQ. Range [0:500].                                                                  */
+/*  - FLOODING - Not applicable                                                                                                 */
+/*  - PULSE_CNT - [NB] Number of pulses. Resolution 1 pulse. Range [0:8000000].                                                 */
+/*  - ELECTRICITY_METER - [W] - Watt; Resolution 1W. Range [0:8000000]. Average power consumption in period                     */
+/*  - WATER_METER [l/min] - Liter per minute. Resolution 1l/min. Range [0:8000000]. Average water flow in period.               */
+/*  - SOIL_MOISTURE - [kPa] - Kilopascal (1kPa = 1000Pa); Resolution 1kPa. Range [-1000:0]. Soil moisture (tension).            */
+/*  - CO_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon monoxide concentration.                    */
+/*  - NO2_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Nitrogen dioxide concentration.                  */
+/*  - H2S_GAS - [ppm] - Parts per million. Resolution 0.01ppm. Range [0.00:80000.00]. Hydrogen sulfide concentration.           */
+/*  - AMBIENT_LIGHT -[lx] - Lux. Resolution 0.1lx. Range [0.0:100000.0]. Illuminance.                                           */
+/*  - PM_1_0 - [µg/m^3] - Micro gram per cubic meter. Resolution 1µg/m^3 Range [0:1000].                                        */
+/*  - PM_2_5 - [µg/m^3] - Micro gram per cubic meter. Resolution 1µg/m^3 Range [0:1000].                                        */
+/*  - PM_10_0 - [µg/m^3] - Micro gram per cubic meter. Resolution 1µg/m^3 Range [0:1000].                                       */
+/*  - NOISE_LEVEL - [dB] - Decibels. Resolution 0.1 dB. Range: [0.0:200.0]. Noise level.                                        */
+/*  - NH3_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Ammonia concentration.                           */
+/*  - CH4_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Methane concentration.                           */
+
+/* Encoding R: used to set relative values in the Rules (e.g. differential threshold and hysteresis)                            */
+/*  - TEMPERATURE - [°C] - Celsius degree. Resolution 0.1°C. Range [0.1:4273.2].                                                */
+/*  - HUMIDITY - [% RH] - Relative humidity. Resolution 1%. Range [1:100].                                                      */
+/*  - ATMOSPHERIC_PRESSURE - [hPa] - Hectopascal (1hPa = 100Pa). Resolution 0.1hPa. Range: [0.1:1999.0].                        */
+/*  - DIFERENTIAL_PRESSURE - [Pa] - Pascal. Resolution 1Pa. Range [1:20000]                                                     */
+/*  - OK/ALARM - Not applicable                                                                                                 */
+/*  - VOC - [IAQ] - Iaq index. Resolution 1IAQ. Range [1:500].                                                                  */
+/*  - FLOODING - Not applicable                                                                                                 */
+/*  - PULSE_CNT - [NB] Number of pulses. Resolution 1 pulse. Range [1:8000000].                                                 */
+/*  - ELECTRICITY_METER - [W] - Watt; Resolution 1W. Range [1:8000000]. Average power consumption in period                     */
+/*  - WATER_METER [l/min] - Liter per minute. Resolution 1l/min. Range [1:8000000]. Average water flow in period.               */
+/*  - SOIL_MOISTURE - [kPa] - Kilopascal (1kPa = 1000Pa); Resolution 1kPa. Range [1:1000]. Soil moisture (tension).             */
+/*  - CO_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Carbon monoxide concentration.                    */
+/*  - NO2_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Nitrogen dioxide concentration.                  */
+/*  - H2S_GAS - [ppm] - Parts per million. Resolution 0.01ppm. Range [0.01:80000.00]. Hydrogen sulfide concentration.           */
+/*  - AMBIENT_LIGHT -[lx] - Lux. Resolution 0.1lx. Range [0.1:100000.0]. Illuminance.                                           */
+/*  - PM_1_0 - [µg/m^3] - Micro gram per cubic meter. Resolution 1µg/m^3 Range [1:1000].                                        */
+/*  - PM_2_5 - [µg/m^3] - Micro gram per cubic meter. Resolution 1µg/m^3 Range [1:1000].                                        */
+/*  - PM_10_0 - [µg/m^3] - Micro gram per cubic meter. Resolution 1µg/m^3 Range [1:1000].                                       */
+/*  - NOISE_LEVEL - [dB] - Decibels. Resolution 0.1 dB. Range: [0.1:200.0]. Noise level.                                        */
+/*  - NH3_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Ammonia concentration.                           */
+/*  - CH4_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Methane concentration.                           */
+
+/* Condition to be checked by the device. If the condition is true, an action is triggered                                      */
+enum Condition {
+
+  /* Invalid value                                                                                                              */
+  CONDITION_UNSPECIFIED = 0;
+
+  /* Threshold function for given rule_id is disabled                                                                           */
+  CONDITION_DISABLED = 1;
+
+  /* Upper threshold. Continuous sensors only. If the measurement (or average from a few measurements) is over the threshold,   */
+  /* an action is triggered.                                                                                                    */
+  /* parameter[0] - Threshold value in "Encoding A" format. Must match channel type                                             */
+  /* parameter[1] - Hysteresis value in "Encoding R" format. Must much channel type. Set to "0" to disable                      */
+  /* parameter[2] - Average calculation mode:                                                                                   */
+  /*                  - 1 - moving average (a1=(n1+n2+n3)/3, a2=(n2+n3+n4)/3, etc.)                                             */
+  /*                  - 2 - window mode (a1=(n1+n2+n3)/3, a2=(n4+n5+n6)/3, etc.)                                                */
+  /* parameter[3] - Number of measurements for average value calculating. E.g parameter[3] equals 3, average value from three   */
+  /*                samples will be calculated and compared to the threshold value.                                             */
+  /* parameter[4] - Type of measurement (as described in MeasurementType).                                                      */
+  CONDITION_HIGH_THRESHOLD = 2;
+
+  /* Lower threshold. Continuous sensors only. If the measurement (or average from a few measurements) is below the threshold,  */
+  /* an action is triggered.                                                                                                    */
+  /* parameter[0] - Threshold value in "Encoding A" format. Must match channel type                                             */
+  /* parameter[1] - Hysteresis value in "Encoding R" format. Must much channel type. Set to "0" to disable                      */
+  /* parameter[2] - Average calculation mode:                                                                                   */
+  /*                  - 1 - moving average (a1=(n1+n2+n3)/3, a2=(n2+n3+n4)/3, etc.)                                             */
+  /*                  - 2 - window mode (a1=(n1+n2+n3)/3, a2=(n4+n5+n6)/3, etc.)                                                */
+  /* parameter[3] - Number of measurements for average value calculating. E.g parameter[3] equals 3, average value from three   */
+  /*                samples will be calculated and compared to the threshold value.                                             */
+  /* parameter[4] - Type of measurement (as described in MeasurementType).                                                      */
+  CONDITION_LOW_THRESHOLD = 3;
+
+  /* Differential threshold. Continuous sensors only. If the absolute value of the difference between the last value sent to    */
+  /* the server and the measurement value (or average from a few measurements) is greater or equal to the value of              */
+  /* the threshold set, an action is triggered.                                                                                 */
+  /* parameter[0] - Threshold value in "Encoding R" format. Must match channel type                                             */
+  /* parameter[1] - Average calculation mode:                                                                                   */
+  /*                  - 1 - moving average (a1=(n1+n2+n3)/3, a2=(n2+n3+n4)/3, etc.)                                             */
+  /*                  - 2 - window mode (a1=(n1+n2+n3)/3, a2=(n4+n5+n6)/3, etc.)                                                */
+  /* parameter[2] - Number of measurements for average value calculating. E.g parameter[2] equals 3, average value from three   */
+  /*                samples will be calculated and compared to the threshold value.                                             */
+  /* parameter[3] - Type of measurement (as described in MeasurementType).                                                      */
+  CONDITION_DIFF_THRESHOLD = 4;
+
+  /* Change of binary sensor's state. Binary sensors only. Each change of the binary's sensor state will trigger an action.     */
+  CONDITION_BINARY_CHANGE_STATE = 5;
+}
+
+/* Action to be triggered. Currently the only possible action is to trigger the transmission.                                   */
+/* Other actions will be available in next SW releases.                                                                         */
+enum Action {
+
+  /* Invalid value                                                                                                              */
+  ACTION_UNSPECIFIED = 0;
+
+  /* To trigger the transmission                                                                                                */
+  ACTION_TRIGGER_TRANSMISSION = 1;
+}
+
+/* Rules used to define edge logic on the device. Rules are defined by conditions and actions:                                  */
+/* If Condition is true, trigger Action. It is possible to configure up to 12 rules and assign them to different channels.      */
+/* One rule can be assigned to any number of channels. For instance rule "If temperature is over 10 C, trigger the transmission"*/
+/* can be assigned to channels 1 and 2. No matter to how many channels a rule is assigned, it's still counted as one rule.      */
+message ProtoRule {
+
+  /* Channels to which the rule is assigned. One rule can be assigned to multiple channels as long as those are of the same type*/
+  /* Bit mask on bits [0:5]. E.g. To assign the rule for channel 1: "000001", to assign rule to channels 2 and 4: "001010"      */
+  uint32 channel_mask = 1;
+
+  /* Rule's condition (as described in Condition).                                                                              */
+  Condition condition = 2;
+
+  /* Condition's parameters (as described in Condition). For binary sensors there are no parameters                             */
+  repeated sint32 parameters = 3;
+
+  /* Action to be triggered.                                                                                                    */
+  Action action = 4;
+}

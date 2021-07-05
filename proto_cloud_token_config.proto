@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+enum CloudTokenConfig {
+
+  /* Invalid value                                                                                                              */
+  CLOUD_TOKEN_CONFIG_UNSPECIFIED = 0;
+
+  /* User set cloud token                                                                                                       */
+  CLOUD_TOKEN_CONFIG_USER_SET = 1;
+
+  /* The IMEI number of the radio modem used as a cloud token                                                                   */
+  CLOUD_TOKEN_CONFIG_USE_IMEI = 2;
+
+  /* Cloud token is not used                                                                                                    */
+  CLOUD_TOKEN_CONFIG_NO_TOKEN = 255;
+}
