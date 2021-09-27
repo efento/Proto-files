@@ -166,4 +166,23 @@ message ProtoConfig {
 
   /* Timestamp when the new configuration was set                                                                               */
   uint32 hash_timestamp = 39;
+
+  /* Cloud token CoAP option ID:                                                                                                */
+  /*   - [1:64999] - CoAP option ID containing cloud token                                                                      */
+  /*   - 65000 - cloud token sent in the payload                                                                                */
+  uint32 cloud_token_coap_option = 40;
+
+  /* ECDSA payload signature CoAP option ID:                                                                                    */
+  /*   - [1:64999] - CoAP option ID containing ECDSA payload signature                                                          */
+  /*   - 65000 - no payload signature in CoAP option                                                                            */
+  uint32 payload_signature_coap_option = 41;
+
+  /* DNS server IP address grouped in the array as four octets. Set 255.255.255.255 to use a network DNS server                 */
+  repeated uint32 dns_server_ip = 42;
+
+  /* DNS TTL configuration:                                                                                                     */
+  /*   - [1:864000] - custom TTL in seconds (additionally, the DNS request when communication has failed)                       */
+  /*   - 864001 - accept TTL from the DNS server (additionally, the DNS request when communication has failed)                  */
+  /*   - 864002 - DNS request is only after communication failed                                                                */
+  uint32 dns_ttl_config = 43;
 }

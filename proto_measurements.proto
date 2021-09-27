@@ -86,10 +86,11 @@ message ProtoMeasurements {
   uint32 transfer_reason = 6;
 
   /* Signal strength level mapped from RSSI:                                                                                    */
-  /*  - 0: 113 dBm or less                                                                                                      */
-  /*  - 1: 111 dBm                                                                                                              */
-  /*  - 2...30: 109...-53 dBm                                                                                                   */
-  /*  - 31: -51 dBm or greater                                                                                                  */
+  /*  - 0: RSSI < -110 dBm                                                                                                      */
+  /*  - 1: -110 dBm <= RSSI < -109 dBm                                                                                          */
+  /*  - 2...61: -109 <= RSSI < -108 dBm ... -50 dBm <= RSSI < -49 dBm                                                           */
+  /*  - 62: -49 dBm <= RSSI < -48 dBm                                                                                           */
+  /*  - 63: RSSI >= -48 dBm                                                                                                     */
   /*  - 99: Not known or not detectable                                                                                         */
   uint32 signal = 7;
 

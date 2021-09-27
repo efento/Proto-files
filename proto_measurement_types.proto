@@ -75,4 +75,19 @@ enum MeasurementType {
 
   /* [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Methane concentration. Type: Continuous                     */
   MEASUREMENT_TYPE_CH4_GAS = 21;
+
+  /* [kPa] - Kilopascal (1kPa = 1000Pa, 100kPa = 1bar). Resolution 1kPa. Range [0:200000]. Pressure. Type: Continuous           */
+  MEASUREMENT_TYPE_HIGH_PRESSURE = 22;
+
+  /* [mm] - Millimeter. Resolution 1mm. Range [0:100000]. Distance. Type: Continuous                                            */
+  MEASUREMENT_TYPE_DISTANCE_MM = 23;
+
+  /* [l] - Liter. Resolution 1l. Range [0:1000000]. Accumulative water meter (minor). Type: Continuous                          */
+  MEASUREMENT_TYPE_WATER_METER_ACC_MINOR = 24;
+
+  /* [hl] - Hectoliter. Resolution 1hl. Range [0:1000000]. Accumulative water meter (major). Type: Continuous                   */
+  MEASUREMENT_TYPE_WATER_METER_ACC_MAJOR = 25;
+
+  /* [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon dioxide concentration. Type: Continuous              */
+  MEASUREMENT_TYPE_CO2_GAS = 26;
 }

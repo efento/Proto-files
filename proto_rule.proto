@@ -22,6 +22,11 @@ syntax = "proto3";
 /*  - NOISE_LEVEL - [dB] - Decibels. Resolution 0.1 dB. Range: [0.0:200.0]. Noise level.                                        */
 /*  - NH3_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Ammonia concentration.                           */
 /*  - CH4_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Methane concentration.                           */
+/*  - HIGH_PRESSURE - [kPa] - Kilopascal (1kPa = 1000Pa, 100kPa = 1bar). Resolution 1kPa. Range [0:200000]. Pressure.           */
+/*  - DISTANCE_MM - [mm] - Millimeter. Resolution 1mm. Range [0:100000]. Distance.                                              */
+/*  - WATER_METER_ACC_MINOR - [l] - Liter. Resolution 1l. Range [0:1000000]. Accumulative water meter (minor).                  */
+/*  - WATER_METER_ACC_MAJOR - [hl] - Hectoliter. Resolution 1hl. Range [0:1000000]. Accumulative water meter (major).           */
+/*  - CO2_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon dioxide concentration.                    */
 
 /* Encoding R: used to set relative values in the Rules (e.g. differential threshold and hysteresis)                            */
 /*  - TEMPERATURE - [°C] - Celsius degree. Resolution 0.1°C. Range [0.1:4273.2].                                                */
@@ -45,6 +50,11 @@ syntax = "proto3";
 /*  - NOISE_LEVEL - [dB] - Decibels. Resolution 0.1 dB. Range: [0.1:200.0]. Noise level.                                        */
 /*  - NH3_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Ammonia concentration.                           */
 /*  - CH4_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Methane concentration.                           */
+/*  - HIGH_PRESSURE - [kPa] - Kilopascal (1kPa = 1000Pa, 100kPa = 1bar). Resolution 1kPa. Range [1:200000]. Pressure.           */
+/*  - DISTANCE_MM - [mm] - Millimeter. Resolution 1mm. Range [1:100000]. Distance.                                              */
+/*  - WATER_METER_ACC_MINOR - [l] - Liter. Resolution 1l. Range [1:1000000]. Accumulative water meter (minor).                  */
+/*  - WATER_METER_ACC_MAJOR - [hl] - Hectoliter. Resolution 1hl. Range [1:1000000]. Accumulative water meter (major).           */
+/*  - CO2_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Carbon dioxide concentration.                    */
 
 /* Condition to be checked by the device. If the condition is true, an action is triggered                                      */
 enum Condition {
