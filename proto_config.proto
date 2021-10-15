@@ -3,6 +3,29 @@ syntax = "proto3";
 import "proto_measurement_types.proto";
 import "proto_rule.proto";
 
+/* Message containing optional channels control parameters                                                                      */
+message ProtoChannelControl {
+
+  /* Channel index                                                                                                              */
+  uint32 channel_index = 1;
+
+  /* Control parameters. Maximal number equals 4. This field is channel specific:                                               */
+  /* IO_control channel:                                                                                                        */
+  /*        - control_params[0]:                                                                                                */
+  /*                      - Byte 0: On state configuration                                                                      */
+  /*                            0x01 - Low                                                                                      */
+  /*                            0x02 - High                                                                                     */
+  /*                            0x03 - High-Z (disconnected)                                                                    */
+  /*                      - Byte 1: Off state configuration                                                                     */
+  /*                            0x01 - Low                                                                                      */
+  /*                            0x02 - High                                                                                     */
+  /*                            0x03 - High-Z (disconnected)                                                                    */
+  /*                      - Byte 2: Power on channel state                                                                      */
+  /*                            0x01 - On                                                                                       */
+  /*                            0x02 - Off                                                                                      */
+  repeated uint32 control_params = 2;
+}
+
 /* Main message sent in the payload. Each field in this message is independent of the others - only parameters that should be   */
 /* changed need to be sent in the payload.                                                                                      */
 /* If the value of a selected parameter shall not be changed, do not include it in the payload                                  */
@@ -130,7 +153,7 @@ message ProtoConfig {
 
   /* Supervision period                                                                                                         */
   /* Range: [180:604800]                                                                                                        */
-  /* 0xFFFFFFFF - Functinality disabled                                                                                         */
+  /* 0xFFFFFFFF - Functionality disabled                                                                                         */
   uint32 supervision_period = 29;
 
   /* If true, sensor's measurement memory will be erased                                                                        */
@@ -185,4 +208,28 @@ message ProtoConfig {
   /*   - 864001 - accept TTL from the DNS server (additionally, the DNS request when communication has failed)                  */
   /*   - 864002 - DNS request is only after communication failed                                                                */
   uint32 dns_ttl_config = 43;
+
+  /* Configuration payload split information. Information about dividing the payload into parts                                 */
+  /* values < 0 - payload has been split, expect another part of the payload in the next message.                               */
+  /*             The absolute value indicates an index of the current message.                                                  */
+  /* value = 0 - payload has not been splitted                                                                                   */
+  /* values > 0 - last part of the split payload, the value indicates the total number of the messages sent                     */
+  sint32 payload_split_info = 44;
+
+  /* Modem update request (string - max length 48)                                                                              */
+  /* This field is only sent by server                                                                                          */
+  /* For BC66 module, this field is a DFOTA URL                                                                                 */
+  string modem_update_request = 45;
+
+  /* Cellular configuration parameters.                                                                                         */
+  /* 1st item - Number of used cellular parameters                                                                              */
+  /* 2nd - 12th items - Cellular parameters                                                                                     */
+  repeated uint32 cellular_config_params = 46;
+
+  /* Calendar configuration. Up to 6 calendars are supported                                                                    */
+  repeated ProtoCalendar calendars = 47;
+
+  /* Control parameters for channels. Maximal number of requests equals 6                                                       */
+  /* This field is only sent by server                                                                                          */
+  repeated ProtoChannelControl channels_control_request = 48;
 }
