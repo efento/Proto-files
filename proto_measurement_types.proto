@@ -90,4 +90,7 @@ enum MeasurementType {
 
   /* [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon dioxide concentration. Type: Continuous              */
   MEASUREMENT_TYPE_CO2_GAS = 26;
+
+  /* [% RH] - Relative humidity. Resolution 0.1%. Range [0.0:100.0]. Type: Continuous                                           */
+  MEASUREMENT_TYPE_HUMIDITY_ACCURATE = 27;
 }

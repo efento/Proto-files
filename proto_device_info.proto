@@ -90,6 +90,26 @@ message ProtoModem
   repeated sint32 parameters = 2;
 }
 
+message ProtoUpdateInfo
+{
+
+  /* Timestamp of update (Unix timestamp)                                                                                       */
+  uint32 timestamp = 1;
+
+  /* Update status, possible values:                                                                                            */
+  /*    - 0x1 - No update yet                                                                                                   */
+  /*    - 0x2 - No error                                                                                                        */
+  /*    - 0x3 - UDP socekt error                                                                                                */
+  /*    - 0x4 - Hash error                                                                                                      */
+  /*    - 0x5 - Missing packet error                                                                                            */
+  /*    - 0x6 - Invalid data error                                                                                              */
+  /*    - 0x7 - Sending timeout error                                                                                           */
+  /*    - 0x8 - No SW to update error                                                                                           */
+  /*    - 0x9 - Sending unexpected error                                                                                        */
+  /*    - 0x10 - Unexpected error                                                                                               */
+  uint32 status = 2;
+}
+
 message ProtoDeviceInfo
 {
 
@@ -152,4 +172,7 @@ message ProtoDeviceInfo
   /*   memory_statistics[20] - Timestamp of the last continuous measurement, that marked as sent.                               */
   /*                           Value in seconds since UNIX EPOCH 01-01-1970. Undefined value: 4294967295                        */
   repeated uint32 memory_statistics = 17;
+
+  /* Information about last sensor SW update                                                                                    */
+  ProtoUpdateInfo last_update_info = 18;
 }

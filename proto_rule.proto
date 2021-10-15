@@ -27,6 +27,7 @@ syntax = "proto3";
 /*  - WATER_METER_ACC_MINOR - [l] - Liter. Resolution 1l. Range [0:1000000]. Accumulative water meter (minor).                  */
 /*  - WATER_METER_ACC_MAJOR - [hl] - Hectoliter. Resolution 1hl. Range [0:1000000]. Accumulative water meter (major).           */
 /*  - CO2_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon dioxide concentration.                    */
+/*  - HUMIDITY ACCURATE - [% RH] - Relative humidity. Resolution 0.1%. Range [0.0:100.0].                                       */
 
 /* Encoding R: used to set relative values in the Rules (e.g. differential threshold and hysteresis)                            */
 /*  - TEMPERATURE - [°C] - Celsius degree. Resolution 0.1°C. Range [0.1:4273.2].                                                */
@@ -55,6 +56,7 @@ syntax = "proto3";
 /*  - WATER_METER_ACC_MINOR - [l] - Liter. Resolution 1l. Range [1:1000000]. Accumulative water meter (minor).                  */
 /*  - WATER_METER_ACC_MAJOR - [hl] - Hectoliter. Resolution 1hl. Range [1:1000000]. Accumulative water meter (major).           */
 /*  - CO2_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Carbon dioxide concentration.                    */
+/*  - HUMIDITY ACCURATE - [% RH] - Relative humidity. Resolution 0.1%. Range [0.1:100.0].                                       */
 
 /* Condition to be checked by the device. If the condition is true, an action is triggered                                      */
 enum Condition {
@@ -69,11 +71,13 @@ enum Condition {
   /* an action is triggered.                                                                                                    */
   /* parameter[0] - Threshold value in "Encoding A" format. Must match channel type                                             */
   /* parameter[1] - Hysteresis value in "Encoding R" format. Must much channel type. Set to "0" to disable                      */
-  /* parameter[2] - Average calculation mode:                                                                                   */
+  /* parameter[2] - Triggering mode:                                                                                            */
   /*                  - 1 - moving average (a1=(n1+n2+n3)/3, a2=(n2+n3+n4)/3, etc.)                                             */
-  /*                  - 2 - window mode (a1=(n1+n2+n3)/3, a2=(n4+n5+n6)/3, etc.)                                                */
-  /* parameter[3] - Number of measurements for average value calculating. E.g parameter[3] equals 3, average value from three   */
-  /*                samples will be calculated and compared to the threshold value.                                             */
+  /*                  - 2 - window average (a1=(n1+n2+n3)/3, a2=(n4+n5+n6)/3, etc.)                                             */
+  /*                  - 3 - consecutive samples (number of consecutive samples above threshold)                                 */
+  /* parameter[3] - Number of measurements for trigger determination. E.g parameter[3] equals 3, average value from three       */
+  /*                samples will be calculated and compared to the threshold value in average mode or the third consecutive     */
+  /*                sample above threshold will trigger action in consecutive mode.                                             */
   /* parameter[4] - Type of measurement (as described in MeasurementType).                                                      */
   CONDITION_HIGH_THRESHOLD = 2;
 
@@ -81,11 +85,13 @@ enum Condition {
   /* an action is triggered.                                                                                                    */
   /* parameter[0] - Threshold value in "Encoding A" format. Must match channel type                                             */
   /* parameter[1] - Hysteresis value in "Encoding R" format. Must much channel type. Set to "0" to disable                      */
-  /* parameter[2] - Average calculation mode:                                                                                   */
+  /* parameter[2] - Triggering mode:                                                                                            */
   /*                  - 1 - moving average (a1=(n1+n2+n3)/3, a2=(n2+n3+n4)/3, etc.)                                             */
-  /*                  - 2 - window mode (a1=(n1+n2+n3)/3, a2=(n4+n5+n6)/3, etc.)                                                */
-  /* parameter[3] - Number of measurements for average value calculating. E.g parameter[3] equals 3, average value from three   */
-  /*                samples will be calculated and compared to the threshold value.                                             */
+  /*                  - 2 - window average (a1=(n1+n2+n3)/3, a2=(n4+n5+n6)/3, etc.)                                             */
+  /*                  - 3 - consecutive samples (number of consecutive samples above threshold)                                 */
+  /* parameter[3] - Number of measurements for trigger determination. E.g parameter[3] equals 3, average value from three       */
+  /*                samples will be calculated and compared to the threshold value in average mode or the third consecutive     */
+  /*                sample below threshold will trigger action in consecutive mode.                                             */
   /* parameter[4] - Type of measurement (as described in MeasurementType).                                                      */
   CONDITION_LOW_THRESHOLD = 3;
 
@@ -93,16 +99,40 @@ enum Condition {
   /* the server and the measurement value (or average from a few measurements) is greater or equal to the value of              */
   /* the threshold set, an action is triggered.                                                                                 */
   /* parameter[0] - Threshold value in "Encoding R" format. Must match channel type                                             */
-  /* parameter[1] - Average calculation mode:                                                                                   */
+  /* parameter[1] - Triggering mode:                                                                                            */
   /*                  - 1 - moving average (a1=(n1+n2+n3)/3, a2=(n2+n3+n4)/3, etc.)                                             */
-  /*                  - 2 - window mode (a1=(n1+n2+n3)/3, a2=(n4+n5+n6)/3, etc.)                                                */
-  /* parameter[2] - Number of measurements for average value calculating. E.g parameter[2] equals 3, average value from three   */
-  /*                samples will be calculated and compared to the threshold value.                                             */
+  /*                  - 2 - window average (a1=(n1+n2+n3)/3, a2=(n4+n5+n6)/3, etc.)                                             */
+  /*                  - 3 - consecutive samples (number of consecutive samples above threshold)                                 */
+  /* parameter[2] - Number of measurements for trigger determination. E.g parameter[3] equals 3, average value from three       */
+  /*                samples will be calculated and compared to the threshold value in average mode or the third consecutive     */
+  /*                sample exceeding threshold will trigger action in consecutive mode.                                         */
   /* parameter[3] - Type of measurement (as described in MeasurementType).                                                      */
   CONDITION_DIFF_THRESHOLD = 4;
 
   /* Change of binary sensor's state. Binary sensors only. Each change of the binary's sensor state will trigger an action.     */
   CONDITION_BINARY_CHANGE_STATE = 5;
+
+  /* Logic operator. Used for combining multiple rules into more complex conditions. If the logic condition specified by        */
+  /* parameters (logic operator and selected rules) is met, an action is triggered.                                             */
+  /* parameter[0] - Logic operator (as described in LogicOperation).                                                            */
+  /* parameter[1] - Rule selector (bit mask). Specifies which rules should be taken into account while determining              */
+  /*                rules outcome.                                                                                              */
+  /* parameter[2] - Rule negation (bit mask). Specifies which of chosen in parameter[1] rules should be negated                 */
+  /*                before determining rules outcome.                                                                           */
+  CONDITION_LOGIC_OPERATOR = 6;
+}
+
+/* Logic operators to be used for determining the outcome of rules with logic operator condition.                               */
+enum LogicOperator {
+
+  /* Invalid use                                                                                                                */
+  LOGIC_OPERATOR_UNSPECIFIED = 0;
+
+  /* Logic AND                                                                                                                  */
+  LOGIC_OPERATOR_AND = 1;
+
+  /* Logic OR                                                                                                                   */
+  LOGIC_OPERATOR_OR = 2;
 }
 
 /* Action to be triggered. Currently the only possible action is to trigger the transmission.                                   */
@@ -114,6 +144,51 @@ enum Action {
 
   /* To trigger the transmission                                                                                                */
   ACTION_TRIGGER_TRANSMISSION = 1;
+
+  /* To take no action. Possible for logic operator components                                                                  */
+  ACTION_NO_ACTION = 2;
+}
+
+/* Type of a rule calendars.                                                                                                    */
+enum CalendarType {
+
+  /* Invalid value                                                                                                              */
+  CALENDAR_TYPE_UNSPECIFIED = 0;
+
+  /* Type for inactive calendars                                                                                                */
+  CALENDAR_TYPE_DISABLED = 1;
+
+  /* Week type. Enables selcted rules on specified days of the week in specified time periods.                                  */
+  /* parameter[0] - Week day mask. Bitmask of days when selected rules are enabled                                              */
+  /*                  - Bit 0 - Sunday                                                                                          */
+  /*                  - Bit 1 - Monday                                                                                          */
+  /*                    ...                                                                                                     */
+  /*                  - Bit 6 - Saturday                                                                                        */
+  /* parameter[1] - 'From time' - point in time from which selected rules will be enabled (in minutes from midnight).           */
+  /* parameter[2] - 'To time' - point in time from which selected rules will be disabled (in minutes from midnight).            */
+  /* Note: if 'From time' is bigger than 'To time' there are two periods when rules are enabled - from 00:00 to 'To time'       */
+  /*        and from 'From time' to 23:59.                                                                                      */
+  /* parameter[3] - Timezone - desired timezone for date comparison. Encoded as number (N) of 15 minutes offsets                */
+  /*                  - example - if N = 4, then  offset = 4 * 15min = 1h. I.e. timezone is UTC+1.                              */
+  CALENDAR_TYPE_WEEK = 2;
+}
+
+/* Rules calendars. Used for enabling/disabling rules based on date/time.                                                       */
+/* It is possible to configure up to 6 calendars. Each of them can affect any number of rules.                                  */
+message ProtoCalendar {
+
+  /* Bit mask of selected rules. Mask on bits [0:11]                                                                            */
+  /*                  - Bit 0 - Rule ID 0                                                                                       */
+  /*                  - Bit 1 - Rule ID 1                                                                                       */
+  /*                    ...                                                                                                     */
+  /*                  - Bit 11 - Rule ID 11                                                                                     */
+  uint32 rule_mask = 1;
+
+  /* Calendars's parameters. Described in Type.                                                                                 */
+  repeated sint32 parameters = 2;
+
+  /* Calendar's type.  Described in Type.                                                                                       */
+  CalendarType type = 3;
 }
 
 /* Rules used to define edge logic on the device. Rules are defined by conditions and actions:                                  */

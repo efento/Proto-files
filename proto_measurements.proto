@@ -18,10 +18,16 @@ message ProtoChannel {
   /* 'Continuous' sensor types                                                                                                  */
   /* Value of the offset from the 'start_point' for each measurement in the package. The oldest sample first ([0]).             */
   /* 'sample_offsets' format defined by 'MeasurementType' field.                                                                */
-  /* Example: MeasurementType = 1 (temperature), start_point = 100, sample_offsets[0] = 15, sample_offsets[1] = 20              */
+  /* If the 'sample_offset' has a value from the range [8355840: 8388607], it should be interpreted as a sensor error code.     */
+  /* In that case value of the 'start_point' field should not be added to this 'sample_offset'. See ES6-264 for error codes.    */
+  /* Example: MeasurementType = 1 (temperature), start_point = 100, sample_offsets[0] = 15, sample_offsets[1] = 20,             */
+  /* sample_offset[2] = 8388605                                                                                                 */
   /* 1st sample in the package temperature value = 11.5 °C, 2nd sample in the package temperature value = 12 °C                 */
+  /* 3rd sample in the package has no temperature value. It has information about failure of MCP9808 (temperature) sensor.      */
   /* Calculating timestamps of the measurements: timestamp = 1606391700, measurement_period_base = 60,                          */
-  /* measurement_period_factor = 1. Timestamp of the 1st sample = 1606391700, timestamp of the 2nd sample = 1606391760          */
+  /* measurement_period_factor = 1. Timestamp of the 1st sample = 1606391700, timestamp of the 2nd sample = 1606391760,         */
+  /* timestamp of the 3rd sample 1606391820                                                                                     */
+  
   /* 'Binary' sensor types:                                                                                                     */
   /* Absolute value of the 'sample_offsets' field indicates the offset in seconds from 'timestamp' field.                       */
   /* Sign (- or +) indicates the state of measurements depend of sensor type.                                                   */
@@ -43,7 +49,7 @@ message ProtoChannel {
   /* int32 hi_threshold = 7;                                                                                                    */
   reserved 7;
 
-  /* Deprecated - configurationis sent to endpoint 'c'                                                                          */
+  /* Deprecated - configurations sent to endpoint 'c'                                                                          */
   /* int32 diff_threshold = 8;                                                                                                  */
   reserved 8;
 }
@@ -83,6 +89,7 @@ message ProtoMeasurements {
   /*  - bit 3-7: number of retries -> incremented after each unsuccessful transmission. Max value 4.                            */
   /*                                  Set to 0 after a successful transmission.                                                 */
   /*  - bit 8...19: rule 1...12 was met                                                                                         */
+  /*  - bit 20: triggered after the end of the limit                                                                            */
   uint32 transfer_reason = 6;
 
   /* Signal strength level mapped from RSSI:                                                                                    */
