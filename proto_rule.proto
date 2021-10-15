@@ -1,3 +1,5 @@
+/* proto_rule.proto file for firmware version 06.08.xx */
+
 syntax = "proto3";
 
 /* Encoding A: used to set absolute values in the Rules (e.g. upper and lower threshold values)                                 */
