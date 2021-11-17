@@ -1,5 +1,3 @@
-/* proto_device_info.proto file for firmware version 06.08.xx */
-
 syntax = "proto3";
 
 enum ModemType
@@ -173,6 +171,7 @@ message ProtoDeviceInfo
   /*                           Value in seconds since UNIX EPOCH 01-01-1970. Undefined value: 4294967295                        */
   /*   memory_statistics[20] - Timestamp of the last continuous measurement, that marked as sent.                               */
   /*                           Value in seconds since UNIX EPOCH 01-01-1970. Undefined value: 4294967295                        */
+  /*   memory_statistics[21] - NVM write counter                                                                                */
   repeated uint32 memory_statistics = 17;
 
   /* Information about last sensor SW update                                                                                    */

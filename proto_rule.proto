@@ -1,5 +1,3 @@
-/* proto_rule.proto file for firmware version 06.08.xx */
-
 syntax = "proto3";
 
 /* Encoding A: used to set absolute values in the Rules (e.g. upper and lower threshold values)                                 */
@@ -8,7 +6,7 @@ syntax = "proto3";
 /*  - ATMOSPHERIC_PRESSURE - [hPa] - Hectopascal (1hPa = 100Pa). Resolution 0.1hPa. Range: [1.0:2000.0].                        */
 /*  - DIFERENTIAL_PRESSURE - [Pa] - Pascal. Resolution 1Pa. Range [-10000:10000]                                                */
 /*  - OK/ALARM - Not applicable                                                                                                 */
-/*  - VOC - [IAQ] - Iaq index. Resolution 1IAQ. Range [0:500].                                                                  */
+/*  - IAQ - [IAQ] - IAQ index. Resolution 1IAQ. Range [0:500].                                                                  */
 /*  - FLOODING - Not applicable                                                                                                 */
 /*  - PULSE_CNT - [NB] Number of pulses. Resolution 1 pulse. Range [0:8000000].                                                 */
 /*  - ELECTRICITY_METER - [W] - Watt; Resolution 1W. Range [0:8000000]. Average power consumption in period                     */
@@ -30,6 +28,8 @@ syntax = "proto3";
 /*  - WATER_METER_ACC_MAJOR - [hl] - Hectoliter. Resolution 1hl. Range [0:1000000]. Accumulative water meter (major).           */
 /*  - CO2_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon dioxide concentration.                    */
 /*  - HUMIDITY ACCURATE - [% RH] - Relative humidity. Resolution 0.1%. Range [0.0:100.0].                                       */
+/*  - STATIC_IAQ - [sIAQ] - Static IAQ index. Resolution 1sIAQ. Range [0:10000].                                                */
+/*  - CO2_EQUIVALENT - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon dioxide equivalent.                */
 
 /* Encoding R: used to set relative values in the Rules (e.g. differential threshold and hysteresis)                            */
 /*  - TEMPERATURE - [°C] - Celsius degree. Resolution 0.1°C. Range [0.1:4273.2].                                                */
@@ -59,6 +59,8 @@ syntax = "proto3";
 /*  - WATER_METER_ACC_MAJOR - [hl] - Hectoliter. Resolution 1hl. Range [1:1000000]. Accumulative water meter (major).           */
 /*  - CO2_GAS - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Carbon dioxide concentration.                    */
 /*  - HUMIDITY ACCURATE - [% RH] - Relative humidity. Resolution 0.1%. Range [0.1:100.0].                                       */
+/*  - STATIC_IAQ - [sIAQ] - Static IAQ index. Resolution 1sIAQ. Range [1:10000].                                                */
+/*  - CO2_EQUIVALENT - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Carbon dioxide equivalent.                */
 
 /* Condition to be checked by the device. If the condition is true, an action is triggered                                      */
 enum Condition {

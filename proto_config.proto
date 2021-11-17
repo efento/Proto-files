@@ -1,5 +1,3 @@
-/* proto_config.proto file for firmware version 06.08.xx */
-
 syntax = "proto3";
 
 import "proto_measurement_types.proto";
@@ -160,7 +158,7 @@ message ProtoConfig {
 
   /* If true, sensor's measurement memory will be erased                                                                        */
   bool memory_reset_request = 30;
-  
+
   /* Bytes 0-4 - Band selection mask. Mask =  1 << position                                                                     */
   /* Band       | 1 | 2 | 3 | 4 | 5 | 8 | 12 | 13 | 17 | 18 | 19 | 20 | 25 | 26 | 28 | 66 | 71 | 85 |                           */
   /* Position:  | 0 | 1 | 2 | 3 | 4 | 5 | 6  |  7 |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 |                           */
@@ -203,6 +201,7 @@ message ProtoConfig {
   uint32 payload_signature_coap_option = 41;
 
   /* DNS server IP address grouped in the array as four octets. Set 255.255.255.255 to use a network DNS server                 */
+  /* Note: when setting less than four octets the remaining will be filled with zeros.                                          */
   repeated uint32 dns_server_ip = 42;
 
   /* DNS TTL configuration:                                                                                                     */

@@ -1,5 +1,3 @@
-/* proto_measurement_types.proto file for firmware version 06.08.xx */
-
 syntax = "proto3";
 
 enum MeasurementType {
@@ -22,7 +20,7 @@ enum MeasurementType {
   /* Sign indicates state: (+) ALARM, (-) OK. Type: Binary                                                                      */
   MEASUREMENT_TYPE_OK_ALARM = 5;
 
-  /* [IAQ] - Iaq index. Resolution 1IAQ. Range [0:500]. To get IAQ index the value should be divided by 3.                      */
+  /* [IAQ] - IAQ index. Resolution 1IAQ. Range [0:500]. To get IAQ index the value should be divided by 3.                      */
   /* Sensor return also calibration status as metadata (is the remainder when the absolute value is divided by 3):              */
   /*   - 0: Calibration required (sensor returns not accurate values)                                                           */
   /*   - 1: Calibration on-going (sensor returns not accurate values)                                                           */
@@ -95,4 +93,21 @@ enum MeasurementType {
 
   /* [% RH] - Relative humidity. Resolution 0.1%. Range [0.0:100.0]. Type: Continuous                                           */
   MEASUREMENT_TYPE_HUMIDITY_ACCURATE = 27;
+
+  /* [sIAQ] - Static IAQ index. Resolution 1IAQ. Range [0:10000]. To get static IAQ index the value should be divided by 3.     */
+  /* Sensor return also calibration status as metadata (is the remainder when the absolute value is divided by 3):              */
+  /*   - 0: Calibration required (sensor returns not accurate values)                                                           */
+  /*   - 1: Calibration on-going (sensor returns not accurate values)                                                           */
+  /*   - 2: Calibration done (best accuracy of IAQ sensor)                                                                      */
+  /* Type: Continuous                                                                                                           */
+  MEASUREMENT_TYPE_STATIC_IAQ = 28;
+
+  /* [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. CO2 equivalent.                                             */
+  /* To get CO2 equivalent the value should be divided by 3.                                                                    */
+  /* Sensor return also calibration status as metadata (is the remainder when the absolute value is divided by 3):              */
+  /*   - 0: Calibration required (sensor returns not accurate values)                                                           */
+  /*   - 1: Calibration on-going (sensor returns not accurate values)                                                           */
+  /*   - 2: Calibration done (best accuracy of IAQ sensor)                                                                      */
+  /* Type: Continuous                                                                                                           */
+  MEASUREMENT_TYPE_CO2_EQUIVALENT = 29;
 }

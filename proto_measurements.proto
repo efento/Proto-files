@@ -1,5 +1,3 @@
-/* proto_measurement.proto file for firmware version 06.08.xx */
-
 syntax = "proto3";
 
 import "proto_measurement_types.proto";
@@ -88,7 +86,7 @@ message ProtoMeasurements {
   /*  - bit 0: first message after sensor reset                                                                                 */
   /*  - bit 1: user button triggered                                                                                            */
   /*  - bit 2: user BLE triggered                                                                                               */
-  /*  - bit 3-7: number of retries -> incremented after each unsuccessful transmission. Max value 4.                            */
+  /*  - bit 3-7: number of retries -> incremented after each unsuccessful transmission. Max value 31.                            */
   /*                                  Set to 0 after a successful transmission.                                                 */
   /*  - bit 8...19: rule 1...12 was met                                                                                         */
   /*  - bit 20: triggered after the end of the limit                                                                            */
