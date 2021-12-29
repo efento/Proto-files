@@ -112,4 +112,13 @@ enum MeasurementType {
   /*   - 2: Calibration done (best accuracy of IAQ sensor)                                                                      */
   /* Type: Continuous                                                                                                           */
   MEASUREMENT_TYPE_CO2_EQUIVALENT = 29;
+
+  /* [ppm] - Parts per million. Resolution 1ppm. Range [0:100000]. Breath VOC estimate.                                         */
+  /* To get breath VOC estimate the value should be divided by 3.                                                               */
+  /* Sensor return also calibration status as metadata (is the remainder when the absolute value is divided by 3):              */
+  /*   - 0: Calibration required (sensor returns not accurate values)                                                           */
+  /*   - 1: Calibration on-going (sensor returns not accurate values)                                                           */
+  /*   - 2: Calibration done (best accuracy of IAQ sensor)                                                                      */
+  /* Type: Continuous                                                                                                           */
+  MEASUREMENT_TYPE_BREATH_VOC = 30;
 }
