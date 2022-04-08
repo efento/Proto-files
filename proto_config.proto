@@ -1,4 +1,4 @@
-/* proto_cloud_token_config.proto file for firmware version 06.09.xx */
+/* proto_cloud_token_config.proto file for firmware version 06.10.xx */
 
 syntax = "proto3";
 
@@ -26,6 +26,20 @@ message ProtoChannelControl {
   /*                            0x01 - On                                                                                       */
   /*                            0x02 - Off                                                                                      */
   repeated uint32 control_params = 2;
+}
+
+/* Message containing request data for accesing calibration parameters                                                          */
+message ProtoCalibrationParameters {
+
+  /* Request details. Bitmask:                                                                                                  */
+  /*      - calibration_request[0:2] - requested channel number.                                                                */
+  uint32 calibration_request = 1;
+
+  /* Assignment of a channel.                                                                                                   */
+  uint32 channel_assignment = 2;
+
+  /* Table of calibration parameters. Max size = 8.                                                                             */
+  repeated int32 parameters = 3;
 }
 
 /* Main message sent in the payload. Each field in this message is independent of the others - only parameters that should be   */
@@ -155,7 +169,7 @@ message ProtoConfig {
 
   /* Supervision period                                                                                                         */
   /* Range: [180:604800]                                                                                                        */
-  /* 0xFFFFFFFF - Functionality disabled                                                                                         */
+  /* 0xFFFFFFFF - Functionality disabled                                                                                        */
   uint32 supervision_period = 29;
 
   /* If true, sensor's measurement memory will be erased                                                                        */
@@ -215,7 +229,7 @@ message ProtoConfig {
   /* Configuration payload split information. Information about dividing the payload into parts                                 */
   /* values < 0 - payload has been split, expect another part of the payload in the next message.                               */
   /*             The absolute value indicates an index of the current message.                                                  */
-  /* value = 0 - payload has not been splitted                                                                                   */
+  /* value = 0 - payload has not been splitted                                                                                  */
   /* values > 0 - last part of the split payload, the value indicates the total number of the messages sent                     */
   sint32 payload_split_info = 44;
 
@@ -235,4 +249,16 @@ message ProtoConfig {
   /* Control parameters for channels. Maximal number of requests equals 6                                                       */
   /* This field is only sent by server                                                                                          */
   repeated ProtoChannelControl channels_control_request = 48;
+
+  /* Set/get calibration parameters for single channel.                                                                         */
+  ProtoCalibrationParameters calibration_parameters_request = 49;
+
+  /* LED application configuration. */
+  repeated uint32 led_config = 50;
+
+  /* Network troubleshooting configuration, if bluetooth is turned off and communication with the server is faulty,             */
+  /* bluetooth will be automatically turned on until the connection is stabilized                                               */
+  /*   - 1: network troubleshooting disabled                                                                                    */
+  /*   - 2: network troubleshooting enabled                                                                                     */
+  uint32 network_troubleshooting = 51;
 }

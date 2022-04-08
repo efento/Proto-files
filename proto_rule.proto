@@ -1,4 +1,4 @@
-/* proto_cloud_token_config.proto file for firmware version 06.09.xx */
+/* proto_cloud_token_config.proto file for firmware version 06.10.xx */
 
 syntax = "proto3";
 
@@ -33,6 +33,7 @@ syntax = "proto3";
 /*  - STATIC_IAQ - [sIAQ] - Static IAQ index. Resolution 1sIAQ. Range [0:10000].                                                */
 /*  - CO2_EQUIVALENT - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon dioxide equivalent.                */
 /*  - BREATH_VOC - [ppm] - Parts per million. Resolution 1ppm. Range [0:100000]. Breath VOC estimate.                           */
+/*  - PERCENTAGE - [%] - Percentage. Resolution 0.01%. Range [0.00:100.00].                                                     */
 
 /* Encoding R: used to set relative values in the Rules (e.g. differential threshold and hysteresis)                            */
 /*  - TEMPERATURE - [°C] - Celsius degree. Resolution 0.1°C. Range [0.1:4273.2].                                                */
@@ -65,6 +66,7 @@ syntax = "proto3";
 /*  - STATIC_IAQ - [sIAQ] - Static IAQ index. Resolution 1sIAQ. Range [1:10000].                                                */
 /*  - CO2_EQUIVALENT - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Carbon dioxide equivalent.                */
 /*  - BREATH_VOC - [ppm] - Parts per million. Resolution 1ppm. Range [1:100000]. Breath VOC estimate.                           */
+/*  - PERCENTAGE - [%] - Percentage. Resolution 0.01%. Range [0.01:100.00].                                                     */
 
 /* Condition to be checked by the device. If the condition is true, an action is triggered                                      */
 enum Condition {
@@ -85,7 +87,7 @@ enum Condition {
   /*                  - 3 - consecutive samples (number of consecutive samples above threshold)                                 */
   /* parameter[3] - Number of measurements for trigger determination. E.g parameter[3] equals 3, average value from three       */
   /*                samples will be calculated and compared to the threshold value in average mode or the third consecutive     */
-  /*                sample above threshold will trigger action in consecutive mode.                                             */
+  /*                sample above threshold will trigger action in consecutive mode. Range: [1:10].                              */
   /* parameter[4] - Type of measurement (as described in MeasurementType).                                                      */
   CONDITION_HIGH_THRESHOLD = 2;
 
@@ -99,7 +101,7 @@ enum Condition {
   /*                  - 3 - consecutive samples (number of consecutive samples above threshold)                                 */
   /* parameter[3] - Number of measurements for trigger determination. E.g parameter[3] equals 3, average value from three       */
   /*                samples will be calculated and compared to the threshold value in average mode or the third consecutive     */
-  /*                sample below threshold will trigger action in consecutive mode.                                             */
+  /*                sample below threshold will trigger action in consecutive mode. Range: [1:10].                              */
   /* parameter[4] - Type of measurement (as described in MeasurementType).                                                      */
   CONDITION_LOW_THRESHOLD = 3;
 
@@ -113,7 +115,7 @@ enum Condition {
   /*                  - 3 - consecutive samples (number of consecutive samples above threshold)                                 */
   /* parameter[2] - Number of measurements for trigger determination. E.g parameter[3] equals 3, average value from three       */
   /*                samples will be calculated and compared to the threshold value in average mode or the third consecutive     */
-  /*                sample exceeding threshold will trigger action in consecutive mode.                                         */
+  /*                sample exceeding threshold will trigger action in consecutive mode. Range: [1:10].                          */
   /* parameter[3] - Type of measurement (as described in MeasurementType).                                                      */
   CONDITION_DIFF_THRESHOLD = 4;
 
@@ -127,7 +129,22 @@ enum Condition {
   /*                rules outcome.                                                                                              */
   /* parameter[2] - Rule negation (bit mask). Specifies which of chosen in parameter[1] rules should be negated                 */
   /*                before determining rules outcome.                                                                           */
+  /* parameter[3] - Rule action delay [s]. Specifies time delay between the rule activation and rule action being triggered.    */
+  /*                Range: [0:864000].                                                                                          */
+  /* parameter[4] - Rule return delay [s]. Specifies time delay between the rule deactivation and rule action being triggered.  */
+  /*                Range: [0:864001]. Max parameter value disables action triggering on rule deactivation.                     */
   CONDITION_LOGIC_OPERATOR = 6;
+
+  /* On measurement. Continous sensors only. The basic function is to trigger communication after measurement if at least 60s   */
+  /* have passed since the last one. Transmission may occur every x measurement. Optionally dependency on the other rule can    */
+  /* be configured, then, when all conditions are met, transmission is triggered.                                               */
+  /* parameter[0] - Send every n measurement. This parameter specifies every which measurement transmission will be triggered   */
+  /*                if all other conditions are met. If parameter[0] equals 1, transmission will occur after every measurement. */
+  /* parameter[1] - Optional. Rule selector (bit mask). Specifies which rule should be taken into account while determining     */
+  /*                the measurement rule outcome.                                                                               */
+  /* parameter[2] - Optional. Rule negation (bit mask). Specifies which of chosen in parameter[1] rule should be negated        */
+  /*                before determining the measurement rule outcome.                                                            */
+  CONDITION_ON_MEASUREMENT = 7;
 }
 
 /* Logic operators to be used for determining the outcome of rules with logic operator condition.                               */
@@ -155,6 +172,9 @@ enum Action {
 
   /* To take no action. Possible for logic operator components                                                                  */
   ACTION_NO_ACTION = 2;
+
+  /* To trigger the transmission with ACK                                                                                       */
+  ACTION_TRIGGER_TRANSMISSION_WITH_ACK = 3;
 }
 
 /* Type of a rule calendars.                                                                                                    */
