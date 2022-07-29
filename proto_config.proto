@@ -1,5 +1,3 @@
-/* proto_cloud_token_config.proto file for firmware version 06.10.xx */
-
 syntax = "proto3";
 
 import "proto_measurement_types.proto";
@@ -197,6 +195,7 @@ message ProtoConfig {
   /* Range: [1:4]                                                                                                               */
   uint32 ble_tx_power_level = 36;
 
+  /* Deprecated field                                                                                                           */
   /* If true, the sensor's runtime errors will be cleared                                                                       */
   bool request_runtime_errors_clear = 37;
 
@@ -261,4 +260,23 @@ message ProtoConfig {
   /*   - 1: network troubleshooting disabled                                                                                    */
   /*   - 2: network troubleshooting enabled                                                                                     */
   uint32 network_troubleshooting = 51;
+
+  /* Reserved by gateway client                                                                                                 */
+  reserved 52, 53;
+
+  /* Encryption key configuration. Sensor sends in this field two last bytes of SHA256 hash calculated from its current         */
+  /* encryption_key configuration.                                                                                              */
+  /* Max length: 16 bytes.                                                                                                      */
+  /* 0x7F - encryption key disabled.                                                                                            */
+  bytes encryption_key = 54;
+
+  /* User name as string. Max length 31                                                                                         */
+  /* String with special character 0x7F (DEL) only indicates that automatic user name is turn on                                */
+  /* User name can only be set to custom value if apn has been configured (is not automatic)                                    */
+  string apn_user_name = 55;
+
+  /* Password as string. Max length 31                                                                                          */
+  /* String with special character 0x7F (DEL) only indicates that automatic password is turn on                                 */
+  /* Password can only be set to custom value if apn_user_name has been configured (is not automatic)                           */
+  string apn_password = 56;
 }

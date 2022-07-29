@@ -1,5 +1,3 @@
-/* proto_cloud_token_config.proto file for firmware version 06.10.xx */
-
 syntax = "proto3";
 
 import "proto_measurement_types.proto";
@@ -29,7 +27,7 @@ message ProtoChannel {
   /* Calculating timestamps of the measurements: timestamp = 1606391700, measurement_period_base = 60,                          */
   /* measurement_period_factor = 1. Timestamp of the 1st sample = 1606391700, timestamp of the 2nd sample = 1606391760,         */
   /* timestamp of the 3rd sample 1606391820                                                                                     */
-
+  
   /* 'Binary' sensor types:                                                                                                     */
   /* Absolute value of the 'sample_offsets' field indicates the offset in seconds from 'timestamp' field.                       */
   /* Sign (- or +) indicates the state of measurements depend of sensor type.                                                   */

@@ -1,5 +1,3 @@
-/* proto_cloud_token_config.proto file for firmware version 06.10.xx */
-
 syntax = "proto3";
 
 /* Encoding A: used to set absolute values in the Rules (e.g. upper and lower threshold values)                                 */
@@ -139,7 +137,8 @@ enum Condition {
   /* have passed since the last one. Transmission may occur every x measurement. Optionally dependency on the other rule can    */
   /* be configured, then, when all conditions are met, transmission is triggered.                                               */
   /* parameter[0] - Send every n measurement. This parameter specifies every which measurement transmission will be triggered   */
-  /*                if all other conditions are met. If parameter[0] equals 1, transmission will occur after every measurement. */
+  /*                if all other conditions are met. Range: [1:500]. If parameter[0] equals 1, transmission will occur after    */
+  /*                every measurement.                                                                                          */
   /* parameter[1] - Optional. Rule selector (bit mask). Specifies which rule should be taken into account while determining     */
   /*                the measurement rule outcome.                                                                               */
   /* parameter[2] - Optional. Rule negation (bit mask). Specifies which of chosen in parameter[1] rule should be negated        */

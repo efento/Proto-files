@@ -1,5 +1,3 @@
-/* proto_cloud_token_config.proto file for firmware version 06.10.xx */
-
 syntax = "proto3";
 
 enum MeasurementType {
