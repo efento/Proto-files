@@ -30,9 +30,9 @@ message ProtoChannel {
   
   /* 'Binary' sensor types:                                                                                                     */
   /* Absolute value of the 'sample_offsets' field indicates the offset in seconds from 'timestamp' field.                       */
-  /* Sign (- or +) indicates the state of measurements depend of sensor type.                                                   */
+  /* Sign (- or +) indicates the state of measurements depending on the sensor type.                                            */
   /* Value of this field equals to '1' or '-1' indicates the state at the 'timestamp'. Other values                             */
-  /* indicate the state of the relay at the time (in seconds) equal to 'timestamp' + value.                                     */
+  /* indicate the state of the relay at the time (in seconds) equal to 'timestamp' + absolute value -1.                         */
   /* Values of this field are incremented starting from 1 (1->0: state at the time                                              */
   /* of 'timestamp', 2->1: state at the time equal to 'timestamp' + 1 s, 3->2 :                                                 */
   /* state at the time equal to 'timestamp' + 2 s, etc.). The first and the last sample define the time range of the            */
