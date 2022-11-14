@@ -252,7 +252,19 @@ message ProtoConfig {
   /* Set/get calibration parameters for single channel.                                                                         */
   ProtoCalibrationParameters calibration_parameters_request = 49;
 
-  /* LED application configuration. */
+  /* LED behaviour configuration:                                                                                               */
+  /*    Period of LEDs flashing (5-600 seconds in 5 seconds resolution):                                                        */
+  /*        - led_config[0] - green LED                                                                                         */
+  /*        - led_config[1] - red LED                                                                                           */
+  /*    Time from entering the normal state, after which the LED indication is turned off                                       */
+  /*    (0-240 minutes in 1 minute resolution, or 255 for always turned on):                                                    */
+  /*        - led_config[2] - flashing red led on communication problem                                                         */
+  /*        - led_config[3] - flashing red led on a sensor problem                                                              */
+  /*        - led_config[4] - flashing red led on a low power                                                                   */
+  /*        - led_config[5] - flashing green led on measurement                                                                 */
+  /*        - led_config[6] - flashing green led on transmission                                                                */
+  /*        - led_config[7] - flashing green led to indicate sensor's proper operation                                          */
+  /*    - led_config[8] - Blink duration (20-1000ms in 5 ms resolution)                                                         */
   repeated uint32 led_config = 50;
 
   /* Network troubleshooting configuration, if bluetooth is turned off and communication with the server is faulty,             */

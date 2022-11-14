@@ -126,4 +126,22 @@ enum MeasurementType {
 
   /* [%] - Percentage. Resolution 0.01%. Range [0.00:100.00]. Type: Continuous                                                  */
   MEASUREMENT_TYPE_PERCENTAGE = 32;
+
+  /* [mV] - Milivolt. Resolution 0.1mV. Range [0.0:100000.0]. Type: Continuous                                                  */
+  MEASUREMENT_TYPE_VOLTAGE = 33;
+
+  /* [mA] - Milliampere. Resolution 0.01mA. Range [0.0:10000.00]. Type: Continuous                                              */
+  MEASUREMENT_TYPE_CURRENT = 34;
+
+  /* [NB] Number of pulses. Resolution 1 pulse. Range [0:1000000]. Type: Continuous                                             */
+  MEASUREMENT_TYPE_PULSE_CNT_ACC_MINOR = 35;
+
+  /* [kNB] Number of kilopulses. Resolution 1 kilopulse. Range [0:1000000]. Type: Continuous                                    */
+  MEASUREMENT_TYPE_PULSE_CNT_ACC_MAJOR = 36;
+
+  /* [Wh] - Watt-hour; Resolution 1Wh. Range [0:1000000]. Number of watt-hours in a single period. Type: Continuous             */
+  MEASUREMENT_TYPE_ELEC_METER_ACC_MINOR = 37;
+
+  /* [kWh] - Kilowatt-hour; Resolution 1kWh. Range [0:1000000]. Number of kilowatt-hours in a single period. Type: Continuous   */
+  MEASUREMENT_TYPE_ELEC_METER_ACC_MAJOR = 38;
 }

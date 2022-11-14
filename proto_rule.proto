@@ -32,6 +32,11 @@ syntax = "proto3";
 /*  - CO2_EQUIVALENT - [ppm] - Parts per million. Resolution 1ppm. Range [0:1000000]. Carbon dioxide equivalent.                */
 /*  - BREATH_VOC - [ppm] - Parts per million. Resolution 1ppm. Range [0:100000]. Breath VOC estimate.                           */
 /*  - PERCENTAGE - [%] - Percentage. Resolution 0.01%. Range [0.00:100.00].                                                     */
+/*  - PULSE_CNT_ACC_MINOR - [NB] - Number of pulses. Resolution 1 pulse. Range [0:1000000]. Accumulative pulse counter (minor). */
+/*  - PULSE_CNT_ACC_MAJOR - [kNB] - Number of kilopulses. Resolution 1 kilopulse. Range [0:1000000].                            */
+/*                                  Accumulative pulse counter (major).                                                         */
+/*  - ELEC_METER_ACC_MINOR - [Wh] - Watt-hour. Resolution 1Wh. Range [0:1000000]. Accumulative electricity meter (minor).       */
+/*  - ELEC_METER_ACC_MAJOR - [kWh] - Kilowatt-hour. Resolution 1kWh. Range [0:1000000]. Accumulative electricity meter (major). */
 
 /* Encoding R: used to set relative values in the Rules (e.g. differential threshold and hysteresis)                            */
 /*  - TEMPERATURE - [°C] - Celsius degree. Resolution 0.1°C. Range [0.1:4273.2].                                                */
@@ -65,6 +70,11 @@ syntax = "proto3";
 /*  - CO2_EQUIVALENT - [ppm] - Parts per million. Resolution 1ppm. Range [1:1000000]. Carbon dioxide equivalent.                */
 /*  - BREATH_VOC - [ppm] - Parts per million. Resolution 1ppm. Range [1:100000]. Breath VOC estimate.                           */
 /*  - PERCENTAGE - [%] - Percentage. Resolution 0.01%. Range [0.01:100.00].                                                     */
+/*  - PULSE_CNT_ACC_MINOR - [NB] - Number of pulses. Resolution 1 pulse. Range [1:1000000]. Accumulative pulse counter (minor). */
+/*  - PULSE_CNT_ACC_MAJOR - [kNB] - Number of kilopulses. Resolution 1 kilopulse. Range [1:1000000].                            */
+/*                                  Accumulative pulse counter (major).                                                         */
+/*  - ELEC_METER_ACC_MINOR - [Wh] - Watt-hour. Resolution 1Wh. Range [1:1000000]. Accumulative electricity meter (minor).       */
+/*  - ELEC_METER_ACC_MAJOR - [kWh] - Kilowatt-hour. Resolution 1kWh. Range [1:1000000]. Accumulative electricity meter (major). */
 
 /* Condition to be checked by the device. If the condition is true, an action is triggered                                      */
 enum Condition {
