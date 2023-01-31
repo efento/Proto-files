@@ -10,11 +10,11 @@ Unlike JSON and XML, the data and context are separated in Protobuf. Context is 
 
   
 
-In order to compile the proto file to a Python class, you will require a protobuf compiler. If you don’t have the compiler yet, download the compiler from its official Github repository: [https://github.com/protocolbuffers/protobuf/releases/tag/v3.17.1](https://github.com/protocolbuffers/protobuf/releases/tag/v3.17.1). You need to download the compiler dedicated for the operating system you are using (eg. for Windows download [protoc-3.17.1-win64.zip](https://github.com/protocolbuffers/protobuf/releases/download/v3.17.1/protoc-3.17.1-win64.zip) and unzip it)
+In order to compile the proto file to a Python class, you will require a protobuf compiler. If you don’t have the compiler yet, download the compiler from its official Github repository: [https://github.com/protocolbuffers/protobuf/releases](https://github.com/protocolbuffers/protobuf/releases). You need to download the compiler dedicated for the operating system you are using (eg. for Windows download [protoc-21.12-win64.zip](https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win64.zip) and unzip it)
 
   
 
-Once you have the protbuf compiler, download the proto files, unzip the folder and place the files in the same directory as the protobuf compiler (if you are using Windows .../protoc-3.17.1-win64/bin/). Run the protocol buffer compiler protoc on your .proto files - open a terminal window and enter:
+Once you have the protbuf compiler, download the proto files, unzip the folder and place the files in the same directory as the protobuf compiler (if you are using Windows .../protoc-21.12-win64/bin/). Run the protocol buffer compiler protoc on your .proto files - open a terminal window and enter:
 
   
 
