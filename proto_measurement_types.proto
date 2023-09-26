@@ -144,4 +144,13 @@ enum MeasurementType {
 
   /* [kWh] - Kilowatt-hour; Resolution 1kWh. Range [0:1000000]. Number of kilowatt-hours in a single period. Type: Continuous   */
   MEASUREMENT_TYPE_ELEC_METER_ACC_MAJOR = 38;
+
+  /* [NB] Number of pulses (wide range). Resolution 1 pulse. Range [0:999999]. Type: Continuous                                 */
+  MEASUREMENT_TYPE_PULSE_CNT_ACC_WIDE_MINOR = 39;
+
+  /* [MNB] Number of megapulses (wide range). Resolution 1 megapulse. Range [0:999999]. Type: Continuous                        */
+  MEASUREMENT_TYPE_PULSE_CNT_ACC_WIDE_MAJOR = 40;
+
+  /* [mA] - Milliampere. Resolution 0.001mA. Range [-4 000.000:4 000.000]. Type: Continuous                                     */
+  MEASUREMENT_TYPE_CURRENT_PRECISE = 41;
 }

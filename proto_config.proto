@@ -97,16 +97,26 @@ message ProtoConfig {
   /* 65535 - disable transfer limit function                                                                                    */
   uint32 transfer_limit_timer = 10;
 
-  /* Data (measurements) server IP address                                                                                      */
-  /* IP of the data server as string in form x.x.x.x. For example: 18.184.24.239                                                */
+  /* For firmware >= 6.07.00:                                                                                                   */
+  /* IP or URL address of the data (measurements) server                                                                        */
+  /* The IP or URL of the data server, provided as string with a maximum length of 31 characters                                */
+  /* For example, use "18.184.24.239" for an IP address or "efento.test.io" for a URL                                           */
+  /* For firmware < 6.07.00:                                                                                                    */
+  /* IP address of the data (measurements) server                                                                               */
+  /* For example, use "18.184.24.239"                                                                                           */
   string data_server_ip = 11;
 
   /* Data (measurements) server port                                                                                            */
   /* Range: [1:65535]                                                                                                           */
   uint32 data_server_port = 12;
 
-  /* Update server IP address                                                                                                   */
-  /* IP of data server as string in form x.x.x.x. For example: 18.184.24.239                                                    */
+  /* For firmware >= 6.07.00:                                                                                                   */
+  /* IP or URL address of the update server                                                                                     */
+  /* The IP or URL of the update server, provided as string with a maximum length of 31 characters                              */
+  /* For example, use "18.184.24.239" for an IP address or "efento.test.io" for a URL                                           */
+  /* For firmware < 6.07.00:                                                                                                    */
+  /* IP address of the update server                                                                                            */
+  /* For example, use "18.184.24.239"                                                                                           */
   string update_server_ip = 13;
 
   /* Update server port for UDP transmission                                                                                    */
@@ -126,7 +136,8 @@ message ProtoConfig {
   /* 0xFFFFFFFF or 1000000 - automatic selection                                                                                */
   uint32 plmn_selection = 17;
 
-  /* Device will power off its cellular modem for requested number of seconds. Maximum number of seconds 604800 (7 days)        */
+  /* Device will power off its cellular modem for requested number of seconds.                                                  */
+  /* Range: [60:604800] (1 minute : 7 days)                                                                                     */
   /* This field is only sent by server                                                                                          */
   uint32 disable_modem_request = 18;
 
@@ -277,7 +288,7 @@ message ProtoConfig {
   reserved 52, 53;
 
   /* Encryption key configuration. Sensor sends in this field two last bytes of SHA256 hash calculated from its current         */
-  /* encryption_key configuration.                                                                                              */
+  /* encryption_key configuration. When encryption key is disabled one byte 0x7F (DEL) is sent.                                 */
   /* Max length: 16 bytes.                                                                                                      */
   /* 0x7F - encryption key disabled.                                                                                            */
   bytes encryption_key = 54;
