@@ -44,6 +44,7 @@ syntax = "proto3";
 /*  - PULSE_CNT_ACC_WIDE_MAJOR - [MNB] - Number of megapulses. Resolution 1 megapulse. Range [0:999999].                        */
 /*                                       Accumulative pulse counter wide range (major).                                         */
 /*  - CURRENT_PRECISE - [mA] - Miliampere. Resolution 0.001mA. Range [-4 000.000:4 000.000].                                    */
+/*  - OUTPUT_CONTROL - Not applicable                                                                                           */
 
 /* Encoding R: used to set relative values in the Rules (e.g. differential threshold and hysteresis)                            */
 /*  - TEMPERATURE - [°C] - Celsius degree. Resolution 0.1°C. Range [0.1:4273.2].                                                */
@@ -89,6 +90,7 @@ syntax = "proto3";
 /*  - PULSE_CNT_ACC_WIDE_MAJOR - [MNB] - Number of megapulses. Resolution 1 megapulse. Range [1:999999].                        */
 /*                                       Accumulative pulse counter wide range (major).                                         */
 /*  - CURRENT_PRECISE - [mA] - Miliampere. Resolution 0.001mA. Range [0.001:8 000.000].                                         */
+/*  - OUTPUT_CONTROL - Not applicable                                                                                           */
 
 /* Condition to be checked by the device. If the condition is true, an action is triggered                                      */
 enum Condition {

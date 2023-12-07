@@ -153,4 +153,7 @@ enum MeasurementType {
 
   /* [mA] - Milliampere. Resolution 0.001mA. Range [-4 000.000:4 000.000]. Type: Continuous                                     */
   MEASUREMENT_TYPE_CURRENT_PRECISE = 41;
+
+  /* Sign indicates state: (+) ON, (-) OFF. Type: Binary                                                                        */
+  MEASUREMENT_TYPE_OUTPUT_CONTROL = 42;
 }
