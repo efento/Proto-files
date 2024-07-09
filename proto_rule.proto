@@ -200,6 +200,10 @@ enum Action {
 
   /* To trigger the transmission with ACK                                                                                       */
   ACTION_TRIGGER_TRANSMISSION_WITH_ACK = 3;
+
+  /* To change BLE advertising period mode to fast (with lower user-configured advertising interval).                           */
+  /* Once the rule is deactived avertising period mode returns to previously configured value.                                  */
+  ACTION_FAST_ADVERTISING_MODE = 4;
 }
 
 /* Type of a rule calendars.                                                                                                    */

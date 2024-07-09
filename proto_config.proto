@@ -27,26 +27,37 @@ message ProtoCalibrationParameters {
   repeated int32 parameters = 3;
 }
 
-/* Message containing network search parameters                                                                                 */
-message ProtoNetworkSearch {
+enum BleAdvertisingPeriodMode {
 
-  /* Time schema in minutes in case there was successful registration since the last reset (exactly 6 items).                   */
-  /* 1st - 6th item - time in minutes, range of a single item: [1:255].                                                         */
-  repeated uint32 time_schema_last_registration_ok = 1;
+  /* Invalid value                                                                                                              */
+  BLE_ADVERTISING_PERIOD_MODE_UNSPECIFIED = 0;
 
-  /* Time schema in minutes in case there wasn't successful registration since the last reset (exactly 6 items).                */
-  /* 1st - 6th item - time in minutes, range of a single item: [1:255].                                                         */
-  repeated uint32 time_schema_last_registration_not_ok = 2;
+  /* Default behavior - faster advertising when measurement period is < 15s.                                                    */
+  BLE_ADVERTISING_PERIOD_MODE_DEFAULT = 1;
 
-  /* Disable base period in minutes.                                                                                            */
-  /* Disable time = counter (from 1 to network_search_counter_max) * network_search_disable_period_base.                        */
-  /* Range: [1:255].                                                                                                            */
-  uint32 disable_period_base = 3;
+  /* User-configured normal interval is used.                                                                                   */
+  BLE_ADVERTISING_PERIOD_MODE_NORMAL = 2;
 
-  /* Disable counter maximum.                                                                                                   */
-  /* Disable time = counter (from 1 to network_search_counter_max) * network_search_disable_period_base.                        */
-  /* Range: [1:255].                                                                                                            */
-  uint32 counter_max = 4;
+  /* User-configured fast interval is used.                                                                                     */
+  BLE_ADVERTISING_PERIOD_MODE_FAST = 3;
+}
+
+/* Message containing BLE advertising period configuration                                                                      */
+message ProtoBleAdvertisingPeriod {
+
+  /* BLE advertising mode:                                                                                                      */
+  /*   - 1: Default, BLE advertising interval is set to 1022.5ms or some lower value, based on continuous measurement period.   */
+  /*   - 2: Normal, uses user-configured value from 'normal' field.                                                             */
+  /*   - 3: Fast, uses user-configured value from 'fast' field (must be lower than or equal to 'normal' field).                 */
+  BleAdvertisingPeriodMode mode = 1;
+
+  /* BLE advertising interval when in normal mode, configured in 0.625ms steps.                                                 */
+  /* Range: [32:16384]                                                                                                          */
+  uint32 normal = 2;
+
+  /* BLE advertising interval when in fast mode, configured in 0.625ms steps.                                                   */
+  /* Range: [32:16384]                                                                                                          */
+  uint32 fast = 3;
 }
 
 /* Main message sent in the payload. Each field in this message is independent of the others - only parameters that should be   */
@@ -259,7 +270,7 @@ message ProtoConfig {
 
   /* Cellular configuration parameters.                                                                                         */
   /* 1st item - Number of used cellular parameters                                                                              */
-  /* 2nd - 16th items - Cellular parameters                                                                                     */
+  /* 2nd - 12th items - Cellular parameters                                                                                     */
   repeated uint32 cellular_config_params = 46;
 
   /* Calendar configuration. Up to 6 calendars are supported                                                                    */
@@ -311,11 +322,13 @@ message ProtoConfig {
   /* Password can only be set to custom value if apn_user_name has been configured (is not automatic)                           */
   string apn_password = 56;
 
-  /* Network search mechanism configuration                                                                                     */
-  ProtoNetworkSearch network_search = 57;
+  /* Reserved by versions above 06.20.00                                                                                        */
+  reserved 57;
 
   /* Control output state on channel pin. Maximal number of requests equals 3                                                   */
   /* This field is only sent by server                                                                                          */
   repeated ProtoOutputControlState output_control_state_request = 58;
 
+  /* BLE advertising period configuration.                                                                                      */
+  ProtoBleAdvertisingPeriod ble_advertising_period = 59;
 }
