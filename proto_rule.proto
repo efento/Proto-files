@@ -45,6 +45,7 @@ syntax = "proto3";
 /*                                       Accumulative pulse counter wide range (major).                                         */
 /*  - CURRENT_PRECISE - [mA] - Miliampere. Resolution 0.001mA. Range [-4 000.000:4 000.000].                                    */
 /*  - OUTPUT_CONTROL - Not applicable                                                                                           */
+/*  - RESISTANCE - [Ohm] - Resistance. Resolution 1Ohm. Range [0:1000000].                                                      */
 
 /* Encoding R: used to set relative values in the Rules (e.g. differential threshold and hysteresis)                            */
 /*  - TEMPERATURE - [°C] - Celsius degree. Resolution 0.1°C. Range [0.1:4273.2].                                                */
@@ -91,6 +92,17 @@ syntax = "proto3";
 /*                                       Accumulative pulse counter wide range (major).                                         */
 /*  - CURRENT_PRECISE - [mA] - Miliampere. Resolution 0.001mA. Range [0.001:8 000.000].                                         */
 /*  - OUTPUT_CONTROL - Not applicable                                                                                           */
+/*  - RESISTANCE - [Ohm] - Resistance. Resolution 1Ohm. Range [1:1000000].                                                      */
+
+/* Encoding AD: used to set absolute values in the Rules for dual-channels (e.g. upper and lower threshold values).             */
+/* The value is combined from two values: Major and Minor channel.                                                              */
+/*  - PULSE_CNT_ACC_WIDE_MAJOR & PULSE_CNT_ACC_WIDE_MINOR - Number of pulses. Resolution 1 pulse. Range [0:999999999999].       */
+/*                                                          Accumulative pulse counter wide range.                              */
+
+/* Encoding RD: used to set relative values in the Rules for dual-channels (e.g. differential threshold and hysteresis).        */
+/* The value is combined from two values: Major and Minor channel.                                                              */
+/*  - PULSE_CNT_ACC_WIDE_MAJOR & PULSE_CNT_ACC_WIDE_MINOR - Number of pulses. Resolution 1 pulse. Range [1:999999999999].       */
+/*                                                          Accumulative pulse counter wide range.                              */
 
 /* Condition to be checked by the device. If the condition is true, an action is triggered                                      */
 enum Condition {
@@ -170,6 +182,29 @@ enum Condition {
   /* parameter[2] - Optional. Rule negation (bit mask). Specifies which of chosen in parameter[1] rule should be negated        */
   /*                before determining the measurement rule outcome.                                                            */
   CONDITION_ON_MEASUREMENT = 7;
+
+  /* Upper threshold. Dual-channel sensors only (PULSE_CNT_ACC_WIDE_MAJOR / PULSE_CNT_ACC_WIDE_MINOR).                          */
+  /* If the measurement is over the threshold, an action is triggered.                                                          */
+  /* parameter[0] - Threshold value for Major channel in "Encoding AD" format. Must match channel type.                         */
+  /* parameter[1] - Threshold value for Minor channel in "Encoding AD" format. Must match channel type.                         */
+  /* parameter[2] - Hysteresis value for Major channel in "Encoding RD" format. Must much channel type. Set to "0" to disable.  */
+  /* parameter[3] - Hysteresis value for Minor channel in "Encoding RD" format. Must much channel type. Set to "0" to disable.  */
+  CONDITION_HIGH_THRESHOLD_DUAL_CHANNEL = 8;
+
+  /* Lower threshold. Dual-channel sensors only (PULSE_CNT_ACC_WIDE_MAJOR / PULSE_CNT_ACC_WIDE_MINOR).                          */
+  /* If the measurement is below the threshold, an action is triggered.                                                         */
+  /* parameter[0] - Threshold value for Major channel in "Encoding AD" format. Must match channel type.                         */
+  /* parameter[1] - Threshold value for Minor channel in "Encoding AD" format. Must match channel type.                         */
+  /* parameter[2] - Hysteresis value for Major channel in "Encoding RD" format. Must much channel type. Set to "0" to disable.  */
+  /* parameter[3] - Hysteresis value for Minor channel in "Encoding RD" format. Must much channel type. Set to "0" to disable.  */
+  CONDITION_LOW_THRESHOLD_DUAL_CHANNEL = 9;
+
+  /* Differential threshold. Dual-channel sensors only (PULSE_CNT_ACC_WIDE_MAJOR / PULSE_CNT_ACC_WIDE_MINOR).                   */
+  /* If the absolute value of the difference between the last value sent to the server and the measurement value                */
+  /* is greater or equal to the value of the threshold set, an action is triggered.                                             */
+  /* parameter[0] - Threshold value for Major channel in "Encoding RD" format. Must match channel type.                         */
+  /* parameter[1] - Threshold value for Minor channel in "Encoding RD" format. Must match channel type.                         */
+  CONDITION_DIFF_THRESHOLD_DUAL_CHANNEL = 10;
 }
 
 /* Logic operators to be used for determining the outcome of rules with logic operator condition.                               */

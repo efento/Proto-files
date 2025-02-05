@@ -11,6 +11,39 @@ enum ModemType
 
   /* Quectel BC66-NA modem                                                                                                      */
   MODEM_TYPE_BC66NA = 2;
+
+  /* Quectel BC660 modem                                                                                                        */
+  MODEM_TYPE_BC660 = 4;
+}
+
+enum ModemFirmwareVersion
+{
+  /* Invalid value                                                                                                              */
+  MODEM_FIRMWARE_VERSION_UNSPECIFIED = 0;
+
+  /* Device was not able to read the firmware version                                                                           */
+  MODEM_FIRMWARE_VERSION_READING_ERROR = 1;
+
+  /* Firmware version unknown by software                                                                                       */
+  MODEM_FIRMWARE_VERSION_UNKNOWN = 2;
+
+  /* BC660KGLAAR01A05_01.002.01.002                                                                                             */
+  MODEM_FIRMWARE_VERSION_BC660_V1 = 3;
+
+  /* BC660KGLAAR01A05_01.200.01.200                                                                                             */
+  MODEM_FIRMWARE_VERSION_BC660_V2 = 4;
+
+  /* BC660KGLAAR01A05_01.202.01.202                                                                                             */
+  MODEM_FIRMWARE_VERSION_BC660_V3 = 5;
+
+  /* BC660KGLAAR01A05_01.203.01.203                                                                                             */
+  MODEM_FIRMWARE_VERSION_BC660_V4 = 6;
+
+  /* BC660KGLAAR01A05_01.204.01.204                                                                                             */
+  MODEM_FIRMWARE_VERSION_BC660_V5 = 7;
+  
+  /* BC660KGLAAR01A05_01.205.01.205                                                                                             */
+  MODEM_FIRMWARE_VERSION_BC660_V6 = 8;
 }
 
 message ProtoRuntime
@@ -45,6 +78,9 @@ message ProtoRuntime
 
   /* Table of runtime errors. Max length: 20                                                                                    */
   repeated uint32 runtime_errors = 9;
+
+  /* The count of sensor resets                                                                                                 */
+  uint32 reset_counter = 10;
 }
 
 message ProtoModem
@@ -64,7 +100,7 @@ message ProtoModem
   /*   parameters[8] - sc_Band - Range: [see module supported bands]. The current serving cell band. Unknown value: -1          */
   /*   parameters[9] - sc_TAC - Range: [0:65536]. Unknown value: -1                                                             */
   /*   parameters[10] - sc_ECL - Range: [0:2]. Unknown value: -1                                                                */
-  /*   parameters[11] - sc_TX_PWR - [0.1cBm] - Range [-440:230]. Unknown value: -1000                                           */
+  /*   parameters[11] - sc_TX_PWR - [0.1dBm] - Range [-440:230]. Unknown value: -1000                                           */
   /*   parameters[12] - OP_MODE - Range: [0:3]. Unknown value: -1                                                               */
   /*   parameters[13] - nc_EARFCN - Range: [0:262143]. Unknown value: -1                                                        */
   /*   parameters[14] - nc_EARNFCN_offset - Range: [0:4] mapped to [-2, -1, -0.5, 0, 1]. Unknown value: -1                      */
@@ -87,12 +123,40 @@ message ProtoModem
   /*   parameters[31] - sleep_duration - [0.1s] - Range: [0:2147483647]. Unknown value: -1                                      */
   /*   parameters[32] - Rx_time - [0.1s] - Range: [0:2147483647]. Unknown value: -1                                             */
   /*   parameters[33] - Tx_time - [0.1s] - Range: [0:2147483647]. Unknown value: -1                                             */
+  /* Parameters for BC660 modem:                                                                                                */
+  /*   parameters[0] - sc_EARFCN - Range: [0:262143]. Unknown value: -1                                                         */
+  /*   parameters[1] - sc_EARNFCN_offset - Range: [0:21] mapped to                                                              */
+  /*                   [invalid, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, -0.5, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9].                  */
+  /*                   Unknown value: -1                                                                                        */
+  /*   parameters[2] - sc_PCI - Range: [0:503]. Unknown value: -1                                                               */
+  /*   parameters[3] - sc_Cell_Id - Range: [1:268435456]. Unknown value: 0                                                      */
+  /*   parameters[4] - sc_RSRP - [dBm] - Range: [-140:-44]. Unknown value: 0                                                    */
+  /*   parameters[5] - sc_RSRQ - [dB] - Range: [-20:-3]. Unknown value: 0                                                       */
+  /*   parameters[6] - sc_RSSI - [dBm] - Range: [-110:-3] Unknown value: 0                                                      */
+  /*   parameters[7] - sc_SINR - [dB] - Range: [-10:30]. Unknown value: 31                                                      */
+  /*   parameters[8] - sc_Band - Range: [see module supported bands]. The current serving cell band. Unknown value: -1          */
+  /*   parameters[9] - sc_TAC - Range: [0:65536]. Unknown value: -1                                                             */
+  /*   parameters[10] - sc_ECL - Range: [0:2]. Unknown value: -1                                                                */
+  /*   parameters[11] - sc_TX_PWR - [dBm] - Range [-45:23]. Unknown value: 128                                                  */
+  /*   parameters[12] - OP_MODE - Range: [0:3] mapped to                                                                        */
+  /*                    [In-band same PCI, In-band different PCI, Guard band, Stand alone]. Unknown value: -1                   */
+  /*   parameters[13] - nc_EARFCN - Range: [0:262143]. Unknown value: -1                                                        */
+  /*   parameters[14] - nc_PCI - Range: [0:503]. Unknown value: -1                                                              */
+  /*   parameters[15] - nc_RSRP - [dBm] - Range: [-140:-44]. Unknown value: 0                                                   */
+  /*   parameters[16] - nc_RSRQ - [dBm] - Range: [-140:-44]. Unknown value: 0                                                   */
+  /*   parameters[17] - sleep_duration - [0.1s] - Range: [0:2147483647]. Unknown value: -1                                      */
+  /*   parameters[18] - Rx_time - [0.1s] - Range: [0:2147483647]. Unknown value: -1                                             */
+  /*   parameters[19] - Tx_time - [0.1s] - Range: [0:2147483647]. Unknown value: -1                                             */
+  /*   parameters[20] - PLMN_state - Range: [0:3] mapped to [no PLMN, searching, selected, unknown]. Unknown value: 3           */
   repeated sint32 parameters = 2;
 
   /* ICCID of inserted/soldered sim card. String up to 22 characters long.                                                      */
   /* 0x7F if sim card is not detected, empty (not sent) if device does not have modem.                                          */
   /* This field is only sent by device                                                                                          */
   string sim_card_identification = 3;
+
+  /* Modem firmware version                                                                                                     */
+  ModemFirmwareVersion firmware_version = 4;
 }
 
 message ProtoUpdateInfo

@@ -27,12 +27,12 @@ message ProtoChannel {
   /* Calculating timestamps of the measurements: timestamp = 1606391700, measurement_period_base = 60,                          */
   /* measurement_period_factor = 1. Timestamp of the 1st sample = 1606391700, timestamp of the 2nd sample = 1606391760,         */
   /* timestamp of the 3rd sample 1606391820                                                                                     */
-  
+
   /* 'Binary' sensor types:                                                                                                     */
   /* Absolute value of the 'sample_offsets' field indicates the offset in seconds from 'timestamp' field.                       */
-  /* Sign (- or +) indicates the state of measurements depending on the sensor type.                                            */
+  /* Sign (- or +) indicates the state of measurements depend of sensor type.                                                   */
   /* Value of this field equals to '1' or '-1' indicates the state at the 'timestamp'. Other values                             */
-  /* indicate the state of the relay at the time (in seconds) equal to 'timestamp' + absolute value -1.                         */
+  /* indicate the state of the relay at the time (in seconds) equal to 'timestamp' + value.                                     */
   /* Values of this field are incremented starting from 1 (1->0: state at the time                                              */
   /* of 'timestamp', 2->1: state at the time equal to 'timestamp' + 1 s, 3->2 :                                                 */
   /* state at the time equal to 'timestamp' + 2 s, etc.). The first and the last sample define the time range of the            */
@@ -49,7 +49,7 @@ message ProtoChannel {
   /* int32 hi_threshold = 7;                                                                                                    */
   reserved 7;
 
-  /* Deprecated - configurations sent to endpoint 'c'                                                                          */
+  /* Deprecated - configurations sent to endpoint 'c'                                                                           */
   /* int32 diff_threshold = 8;                                                                                                  */
   reserved 8;
 }
@@ -86,20 +86,14 @@ message ProtoMeasurements {
   /*  - bit 0: first message after sensor reset                                                                                 */
   /*  - bit 1: user button triggered                                                                                            */
   /*  - bit 2: user BLE triggered                                                                                               */
-  /*  - bit 3-7: number of retries -> incremented after each unsuccessful transmission. Max value 31.                            */
+  /*  - bit 3-7: number of retries -> incremented after each unsuccessful transmission. Max value 31.                           */
   /*                                  Set to 0 after a successful transmission.                                                 */
   /*  - bit 8...19: rule 1...12 was met                                                                                         */
   /*  - bit 20: triggered after the end of the limit                                                                            */
   uint32 transfer_reason = 6;
 
-  /* Signal strength level mapped from RSSI:                                                                                    */
-  /*  - 0: RSSI < -110 dBm                                                                                                      */
-  /*  - 1: -110 dBm <= RSSI < -109 dBm                                                                                          */
-  /*  - 2...61: -109 <= RSSI < -108 dBm ... -50 dBm <= RSSI < -49 dBm                                                           */
-  /*  - 62: -49 dBm <= RSSI < -48 dBm                                                                                           */
-  /*  - 63: RSSI >= -48 dBm                                                                                                     */
-  /*  - 99: Not known or not detectable                                                                                         */
-  uint32 signal = 7;
+  /* DEPRECATED signal strength - Used for backward compatibility                                                               */
+  reserved 7;
 
   /* Hash of the current configuration. Hash value changes each time a device receives a new configuration                      */
   uint32 hash = 9;

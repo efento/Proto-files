@@ -156,4 +156,7 @@ enum MeasurementType {
 
   /* Sign indicates state: (+) ON, (-) OFF. Type: Binary                                                                        */
   MEASUREMENT_TYPE_OUTPUT_CONTROL = 42;
+
+  /* [Ohm] - Ohm. Resolution 1Ohm. Range [0:1000000]. Type: Continuous                                                          */
+  MEASUREMENT_TYPE_RESISTANCE = 43;
 }

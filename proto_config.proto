@@ -27,6 +27,28 @@ message ProtoCalibrationParameters {
   repeated int32 parameters = 3;
 }
 
+/* Message containing network search parameters                                                                                 */
+message ProtoNetworkSearch {
+
+  /* Time schema in minutes in case there was successful registration since the last reset (exactly 6 items).                   */
+  /* 1st - 6th item - time in minutes, range of a single item: [1:255].                                                         */
+  repeated uint32 time_schema_last_registration_ok = 1;
+
+  /* Time schema in minutes in case there wasn't successful registration since the last reset (exactly 6 items).                */
+  /* 1st - 6th item - time in minutes, range of a single item: [1:255].                                                         */
+  repeated uint32 time_schema_last_registration_not_ok = 2;
+
+  /* Disable base period in minutes.                                                                                            */
+  /* Disable time = counter (from 1 to network_search_counter_max) * network_search_disable_period_base.                        */
+  /* Range: [1:255].                                                                                                            */
+  uint32 disable_period_base = 3;
+
+  /* Disable counter maximum.                                                                                                   */
+  /* Disable time = counter (from 1 to network_search_counter_max) * network_search_disable_period_base.                        */
+  /* Range: [1:255].                                                                                                            */
+  uint32 counter_max = 4;
+}
+
 enum BleAdvertisingPeriodMode {
 
   /* Invalid value                                                                                                              */
@@ -43,6 +65,7 @@ enum BleAdvertisingPeriodMode {
 }
 
 /* Message containing BLE advertising period configuration                                                                      */
+
 message ProtoBleAdvertisingPeriod {
 
   /* BLE advertising mode:                                                                                                      */
@@ -205,8 +228,8 @@ message ProtoConfig {
   bool memory_reset_request = 30;
 
   /* Bytes 0-4 - Band selection mask. Mask =  1 << position                                                                     */
-  /* Band       | 1 | 2 | 3 | 4 | 5 | 8 | 12 | 13 | 17 | 18 | 19 | 20 | 25 | 26 | 28 | 66 | 71 | 85 |                           */
-  /* Position:  | 0 | 1 | 2 | 3 | 4 | 5 | 6  |  7 |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 |                           */
+  /* Band       | 1 | 2 | 3 | 4 | 5 | 8 | 12 | 13 | 17 | 18 | 19 | 20 | 25 | 26 | 28 | 66 | 71 | 85 | 70 |                      */
+  /* Position:  | 0 | 1 | 2 | 3 | 4 | 5 | 6  |  7 |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 |                      */
   /* example: To enable band 3, 8 and 20 set to  (1 << 2) + (1 << 5) + (1 << 11) = 2084                                         */
   uint32 modem_bands_mask = 31;
 
@@ -270,7 +293,7 @@ message ProtoConfig {
 
   /* Cellular configuration parameters.                                                                                         */
   /* 1st item - Number of used cellular parameters                                                                              */
-  /* 2nd - 12th items - Cellular parameters                                                                                     */
+  /* 2nd - 16th items - Cellular parameters                                                                                     */
   repeated uint32 cellular_config_params = 46;
 
   /* Calendar configuration. Up to 6 calendars are supported                                                                    */
@@ -322,8 +345,8 @@ message ProtoConfig {
   /* Password can only be set to custom value if apn_user_name has been configured (is not automatic)                           */
   string apn_password = 56;
 
-  /* Reserved by versions above 06.20.00                                                                                        */
-  reserved 57;
+  /* Network search mechanism configuration                                                                                     */
+  ProtoNetworkSearch network_search = 57;
 
   /* Control output state on channel pin. Maximal number of requests equals 3                                                   */
   /* This field is only sent by server                                                                                          */
