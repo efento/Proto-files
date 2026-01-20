@@ -1,0 +1,87 @@
+/* Copyright 2026 Efento sp. z o.o.                                                                                             */
+/*                                                                                                                              */
+/* Licensed under the Apache License, Version 2.0 (the "License");                                                              */
+/* you may not use this file except in compliance with the License.                                                             */
+/* You may obtain a copy of the License at                                                                                      */
+/*                                                                                                                              */
+/*     http://www.apache.org/licenses/LICENSE-2.0                                                                               */
+/*                                                                                                                              */
+/* Unless required by applicable law or agreed to in writing, software                                                          */
+/* distributed under the License is distributed on an "AS IS" BASIS,                                                            */
+/* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.                                                     */
+/* See the License for the specific language governing permissions and                                                          */
+/* limitations under the License.                                                                                               */
+
+syntax = "proto3";
+
+message ProtoCalibrationParameters {
+
+  /* Sensor code.                                                                                                               *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  uint32 sensor_code = 1;
+
+  /* Calibration parameters.                                                                                                    *
+   * Up to 8 parameters supported.                                                                                              *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  repeated sint32 parameters = 2;
+
+  /* Timestamp of the last calibration in seconds since 1st of January 1970 (epoch time).                                       *
+   * This includes both the calibration procedure and the modification of the calibration parameters.                           *
+   * This field is only sent by the device.                                                                                     *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  fixed32 calibration_timestamp = 3;
+
+  /* Calibration procedure status:                                                                                              *
+   *   - 0 - Calibration in progress                                                                                            *
+   *   - 1 - Calibration request failed                                                                                         *
+   *   - 2 - Calibration not initiated                                                                                          *
+   *   - 3 - Calibration successful                                                                                             *
+   *   - 4 - Calibration failed                                                                                                 *
+   * This field is only sent by the device.                                                                                     *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  uint32 calibration_status = 4;
+}
+
+message ProtoExtendedConfiguration {
+
+  /* DEVICE STATUS FIELDS ----------------------------------------------------------------------------------------------------- */
+
+  /* Serial number of the device.                                                                                               *
+   * Length: 6 bytes.                                                                                                           *
+   * This field is only sent by the device.                                                                                     *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  bytes serial_number = 1;
+
+  /* Identifier of the current extended configuration.                                                                          *
+   * The value of this field changes with every extended configuration change.                                                  *
+   * This field is only sent by the device.                                                                                     *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  uint32 extended_configuration_hash = 2;
+
+  /* Date of the last calibration carried out by the labolatory, in days since 1st of January 1970.                             *
+   * This field is only sent by device                                                                                          *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  uint32 labolatory_calibration_date = 7;
+
+  /* EXTENDED CONFIGURATION FIELDS -------------------------------------------------------------------------------------------- */
+
+  /* Channel calibration parameters.                                                                                            *
+   * Up to 6 channels supported.                                                                                                *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  repeated ProtoCalibrationParameters calibration_parameters = 3;
+
+  /* Sensor name.                                                                                                               *
+   * String up to 31 characters.                                                                                                *
+   * The Bluetooth application reads this field to set the sensor name in the application, but it can be used for any purpose.  *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  string sensor_name = 4;
+
+  /* SERVER COMMUNICATION FIELDS ---------------------------------------------------------------------------------------------- */
+
+  /* Cloud token.                                                                                                               *
+   * Can be empty, set to any user-defined value, or hold device IMEI.                                                          *
+   * String up to 36 characters.                                                                                                *
+   * This field is only sent during server communication.                                                                       *
+   * Status: In use [07.00.00 - LATEST]                                                                                         */
+  string cloud_token = 5;
+}

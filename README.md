@@ -20,9 +20,51 @@ Once you have the protbuf compiler, download the proto files, unzip the folder a
 
     protoc --python_out=.. proto_measurement_types.proto
     protoc --python_out=.. proto_measurements.proto
-    protoc --python_out=.. proto_cloud_token_config.proto
+    protoc --python_out=.. proto_config_types.proto
+    protoc --python_out=.. proto_config_rule.proto
     protoc --python_out=.. proto_config.proto
+    protoc --python_out=.. proto_extended_configuration.proto
     protoc --python_out=.. proto_device_info.proto
-    protoc --python_out=.. proto_nvstore.proto
-    protoc --python_out=.. proto_rule.proto
     
+# Changelog - Protobuf Refactoring in version 07.xx
+
+## Description
+This update focuses on refactoring field names across several `.proto` files to improve naming consistency, clarity, and alignment with the current system domain. 
+
+> [!IMPORTANT]
+> **Wire Compatibility:** **Fully Preserved.** > All field tags (numeric identifiers) remain unchanged. Legacy devices and services using the old field names in their source code will continue to communicate successfully with services using the new definitions at the binary level.
+
+## Technical Notes
+* **Breaking Change (Source Level):** This refactoring requires updates to the application logic. After regenerating the stubs, you must update all references to getters, setters, and builders.
+* **Import Statements:** The file `proto_rule.proto` has been renamed to `proto_config_rule.proto`. Ensure all import statements in your project are updated.
+
+---
+
+## Detailed Mapping of Changes
+
+### File Rename
+| Old Filename | New Filename |
+| :--- | :--- |
+| `proto_rule.proto` | `proto_config_rule.proto` |
+
+### Field Name Changes
+| Message / Context | Old Field Name | New Field Name |
+| :--- | :--- | :--- |
+| **ProtoMeasurements** | `serial_num` | `serial_number` |
+| **ProtoMeasurements** | `hash` | `configuration_hash` |
+| **ProtoMeasurements** | `signal` | `signal_strength` |
+| **ProtoDeviceInfo** | `serial_num` | `serial_number` |
+| **ProtoRuntime** | `min_battery_voltage` | `battery_voltage` |
+| **ProtoConfig** | `hash` | `configuration_hash` |
+| **ProtoConfig** | `hash_timestamp` | `configuration_hash_timestamp` |
+| **ProtoConfig** | `errors` | `configuration_errors` |
+| **ProtoConfig** | `error_timestamp` | `configuration_error_timestamp` |
+| **ProtoConfig** | `accept_without_testing` | `accept_without_testing_request` |
+| **ProtoConfig** | `request_configuration` | `configuration_request` |
+| **ProtoConfig** | `request_device_info` | `device_info_request` |
+| **ProtoConfig** | `request_fw_update` | `update_software_request` |
+| **ProtoConfig** | `request_runtime_errors_clear` | `clear_runtime_errors_request` |
+| **ProtoConfig** | `modem_update_request` | `update_modem_request` |
+| **ProtoConfig** | `memory_reset_request` | `reset_memory_request` |
+| **ProtoConfig** | `output_control_state_request` | `set_output_control_state_request` |
+| **ProtoConfig** | `apn_user_name` | `apn_username` |
