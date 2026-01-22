@@ -134,7 +134,7 @@ message ProtoMeasurements {
   /* Battery status:                                                                                                            *
    *   - True - Battery OK                                                                                                      *
    *   - False - Battery discharged                                                                                             *
-   * Status: Deprecated [06.00 - LATEST]                                                                                        */
+   * Status: In use [06.00 - LATEST]                                                                                        */
   bool battery_status = 2;
 
   /* Timestamp of the next scheduled transmission.                                                                              *

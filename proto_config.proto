@@ -283,31 +283,31 @@ message ProtoConfig {
   uint32 data_server_port = 12;
 
   /* Data endpoint.                                                                                                             *
-   * String up to 12 characters.                                                                                                *
+   * String up to 11 characters.                                                                                                *
    * Group: Data Server                                                                                                         *
    * Status: In use [06.02 - LATEST]                                                                                            */
   string data_endpoint = 32;
 
   /* Configuration endpoint.                                                                                                    *
-   * String up to 12 characters.                                                                                                *
+   * String up to 11 characters.                                                                                                *
    * Group: Data Server                                                                                                         *
    * Status: In use [06.02 - LATEST]                                                                                            */
   string configuration_endpoint = 33;
 
   /* Extended configuration endpoint.                                                                                           *
-   * String up to 12 characters.                                                                                                *
+   * String up to 11 characters.                                                                                                *
    * Group: Data Server                                                                                                         *
    * Status: In use [07.00.00 - LATEST]                                                                                         */
   string extended_configuration_endpoint = 61;
 
   /* Device information endpoint.                                                                                               *
-   * String up to 12 characters.                                                                                                *
+   * String up to 11 characters.                                                                                                *
    * Group: Device Information Endpoint                                                                                         *
    * Status: In use [06.02 - LATEST]                                                                                            */
   string device_info_endpoint = 34;
 
   /* Time endpoint.                                                                                                             *
-   * String up to 12 characters.                                                                                                *
+   * String up to 11 characters.                                                                                                *
    * Group: Time Endpoint                                                                                                       *
    * Status: In use [06.02 - LATEST]                                                                                            */
   string time_endpoint = 35;
