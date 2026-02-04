@@ -58,10 +58,10 @@ message ProtoExtendedConfiguration {
    * Status: In use [07.00.00 - LATEST]                                                                                         */
   uint32 extended_configuration_hash = 2;
 
-  /* Date of the last calibration carried out by the labolatory, in days since 1st of January 1970.                             *
+  /* Date of the last calibration carried out by the laboratory, in days since 1st of January 1970.                             *
    * This field is only sent by device                                                                                          *
    * Status: In use [07.00.00 - LATEST]                                                                                         */
-  uint32 labolatory_calibration_date = 7;
+  uint32 laboratory_calibration_date = 7;
 
   /* EXTENDED CONFIGURATION FIELDS -------------------------------------------------------------------------------------------- */
 
