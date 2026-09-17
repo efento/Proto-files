@@ -81,7 +81,7 @@ message ProtoExtendedConfiguration {
   /* Cloud token.                                                                                                               *
    * Can be empty, set to any user-defined value, or hold device IMEI.                                                          *
    * String up to 36 characters.                                                                                                *
-   * This field is only sent during server communication.                                                                       *
+   * This field is only sent by the sensor during server communication.                                                         *
    * Status: In use [07.00.00 - LATEST]                                                                                         */
   string cloud_token = 5;
 }

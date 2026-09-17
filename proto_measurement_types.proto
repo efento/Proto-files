@@ -218,4 +218,11 @@ enum MeasurementType {
 
   /* [°C] - Celsius degree. Dew point (condensation temperature). Resolution: 0.1°C. Range: [-100.0:100.0]. Type: Continuous.   */
   MEASUREMENT_TYPE_DEW_POINT = 45;
+
+  /* [mA] - Milliampere. RMS current. Resolution: 1mA. Range: [0:1000000]. Type: Continuous.                                    *
+   * To obtain the RMS current, the measurement value should be divided by 2.                                                   *
+   * Measurement also includes a range status as metadata (is the remainder of the absolute value divided by 2):                *
+   *   - 0 - Current within the current clamp rated range                                                                       *
+   *   - 1 - Current above the current clamp rated range (reading may be less accurate)                                         */
+  MEASUREMENT_TYPE_RMS_CURRENT = 46;
 }

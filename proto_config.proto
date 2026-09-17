@@ -35,7 +35,6 @@ message ProtoConfig {
   /* Configuration payload split information:                                                                                   *
    *   - Values < 0 - Payload split, expect another part of the payload in the next message.                                    *
    *                  The absolute value indicates an index of the current message                                              *
-   *   - Values = 0 - Payload not split                                                                                         *
    *   - Values > 0 - Last part of the split payload, the value indicates the total number of the messages sent                 *
    * This field is only sent by the device.                                                                                     *
    * Status: In use [06.08.00 - LATEST]                                                                                         */
@@ -72,7 +71,8 @@ message ProtoConfig {
    * Array of bitmasks representing correlations for each channel.                                                              *
    * Each element `correlated_channels[i]` is a bitmask for channel i+1.                                                        *
    * Bit n (0-5) in the mask corresponds to channel n+1.                                                                        *
-   * Value 0 indicates an unassigned channel (active channels always correlate with themselves).                                *
+   * Value 0 indicates no association with another channel on the channel side, or an unassigned channel. [07.04.00-LATEST]     *
+   * Value 0 indicates an unassigned channel (active channels always correlate with themselves) [07.03.00-07.03.xx].            *
    * Trailing unassigned channels are omitted from the array.                                                                   *
    * This field is only sent by the device.                                                                                     *
    * Status: In use [07.03.00 - LATEST]                                                                                         */
@@ -174,7 +174,12 @@ message ProtoConfig {
    * Channel: | 1 | 2 | 3 | 4 | 5 | 6 |                                                                                         *
    * Bit:     | 0 | 1 | 2 | 3 | 4 | 5 |                                                                                         *
    * Example: We have a three-channel sensor. If we send 5, the device will enable channels 1 and 3 and disable channel 2.      *
-   * At least one channel must be enabled. If there is a pair of major/minor channels, both must be enabled or disabled.        *
+   * At least one channel must be enabled.                                                                                      *
+   * An enabled/disabled channel requires all channels from its correlation mask to be enabled/disabled.                        *
+   * For bi-directional dependencies (e.g., major/minor), both must be enabled or disabled together.                            *
+   * For uni-directional dependencies (e.g., dew point depending on temperature and humidity),                                  *
+   * the dependent channel can be disabled separately, but its source channels cannot be disabled                               *
+   * without also disabling the dependent channel.                                                                              *
    * This field is only sent by the user/server.                                                                                *
    * Status: In use [07.03.00 - LATEST]                                                                                         */
   uint32 enable_channels_request = 66;

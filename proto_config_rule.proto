@@ -18,7 +18,7 @@ syntax = "proto3";
  *   - TEMPERATURE - [°C] Celsius degree. Resolution: 0.1°C. Range: [-273.2:4000.0]                                             *
  *   - HUMIDITY - [% RH] Percentage (Relative humidity). Resolution: 1%. Range: [0:100]                                         *
  *   - ATMOSPHERIC_PRESSURE - [hPa] Hectopascal. Resolution: 0.1hPa. Range: [1.0:2000.0]                                        *
- *   - DIFERENTIAL_PRESSURE - [Pa] Pascal. Resolution: 1Pa. Range: [-10000:10000]                                               *
+ *   - DIFFERENTIAL_PRESSURE - [Pa] Pascal. Resolution: 1Pa. Range: [-10000:10000]                                              *
  *   - OK_ALARM - Not applicable                                                                                                *
  *   - IAQ - [IAQ] IAQ index. Resolution: 1IAQ. Range: [0:500]                                                                  *
  *   - FLOODING - Not applicable                                                                                                *
@@ -65,7 +65,7 @@ syntax = "proto3";
  *   - TEMPERATURE - [°C] Celsius degree. Resolution: 0.1°C. Range: [0.1:4273.2]                                                *
  *   - HUMIDITY - [% RH] Percentage (Relative humidity). Resolution: 1%. Range: [1:100]                                         *
  *   - ATMOSPHERIC_PRESSURE - [hPa] Hectopascal. Resolution: 0.1hPa. Range: [0.1:1999.0]                                        *
- *   - DIFERENTIAL_PRESSURE - [Pa] Pascal. Resolution: 1Pa. Range: [1:20000]                                                    *
+ *   - DIFFERENTIAL_PRESSURE - [Pa] Pascal. Resolution: 1Pa. Range: [1:20000]                                                   *
  *   - OK_ALARM - Not applicable                                                                                                *
  *   - IAQ - [IAQ] IAQ index. Resolution: 1IAQ. Range: [1:500]                                                                  *
  *   - FLOODING - Not applicable                                                                                                *
@@ -196,6 +196,33 @@ enum Condition {
    * Status: In use [06.10.00 - LATEST]                                                                                         */
   CONDITION_ON_MEASUREMENT = 7;
 
+  /* Upper threshold for dual-channel. 'PULSE_CNT_ACC_WIDE' sensors only.                                                       *
+   * If the combined value from MAJOR and MINOR channels is over the threshold, an action is triggered.                         *
+   * parameter[0] - Threshold value for MAJOR channel in "Encoding A" format.                                                   *
+   * parameter[1] - Threshold value for MINOR channel in "Encoding A" format.                                                   *
+   * parameter[2] - Hysteresis value for MAJOR channel in "Encoding A" format. Set to "0" to disable.                           *
+   * parameter[3] - Hysteresis value for MINOR channel in "Encoding A" format. Set to "0" to disable.                           *
+   * Status: In use [07.04.00 - LATEST] / Previously as CONDITION_HIGH_THRESHOLD_DUAL_CHANNEL [06.21.00 - 06.xx.xx]             */
+  CONDITION_HIGH_DUAL_CHANNEL_THRESHOLD = 8;
+
+  /* Lower threshold for dual-channel. 'PULSE_CNT_ACC_WIDE' sensors only.                                                       *
+   * If the combined value from MAJOR and MINOR channels is below the threshold, an action is triggered.                        *
+   * parameter[0] - Threshold value for MAJOR channel in "Encoding A" format.                                                   *
+   * parameter[1] - Threshold value for MINOR channel in "Encoding A" format.                                                   *
+   * parameter[2] - Hysteresis value for MAJOR channel in "Encoding A" format. Set to "0" to disable.                           *
+   * parameter[3] - Hysteresis value for MINOR channel in "Encoding A" format. Set to "0" to disable.                           *
+    * Status: In use [07.04.00 - LATEST] / Previously as CONDITION_LOW_THRESHOLD_DUAL_CHANNEL [06.21.00 - 06.xx.xx]             */
+  CONDITION_LOW_DUAL_CHANNEL_THRESHOLD = 9;
+
+  /* Differential threshold for dual-channel. 'PULSE_CNT_ACC_WIDE' sensors only.                                                *
+   * If the absolute value of the difference between the last value sent to the server and the combined measurement             *
+   * value from MAJOR and MINOR channels is greater or equal to the threshold, an action is triggered.                          *
+   * parameter[0] - Threshold value for MAJOR channel in "Encoding A" format.                                                   *
+   * parameter[1] - Threshold value for MINOR channel in "Encoding A" format.                                                   *
+   *                If parameter[0] equals 0, the value of parameter[1] cannot be 0.                                            *
+   * Status: In use [07.04.00 - LATEST] / Previously as CONDITION_DIFF_THRESHOLD_DUAL_CHANNEL [06.21.00 - 06.xx.xx]             */
+  CONDITION_DIFF_DUAL_CHANNEL_THRESHOLD = 10;
+
   /* On sensor error. 'Continuous' sensors only.                                                                                *
    * If the sensor returns an error code, an action will be triggered.                                                          *
    * The rule becomes inactive when a correct measurement appears.                                                              *
@@ -241,8 +268,8 @@ enum Action {
   ACTION_TRIGGER_TRANSMISSION_WITH_ACK = 3;
 
   /* To change BLE advertising period mode to fast (with lower user-configured advertising interval).                           *
-   * Once the rule is deactived avertising period mode returns to previously configured value.                                  *
-   * Status: In use [06.13.00/06.21.00 - LATEST]                                                                                         */
+   * Once the rule is deactivated advertising period mode returns to previously configured value.                               *
+   * Status: In use [06.13.00/06.21.00 - LATEST]                                                                                */
   ACTION_FAST_ADVERTISING_MODE = 4;
 }
 
@@ -256,7 +283,7 @@ enum CalendarType {
    * Status: In use [06.08.00 - LATEST]                                                                                         */
   CALENDAR_TYPE_DISABLED = 1;
 
-  /* Week calendar. Enables selcted rules on specified days of the week in specified time periods.                              *
+  /* Week calendar. Enables selected rules on specified days of the week in specified time periods.                             *
    * parameter[0] - Week day mask. Bitmask of days when selected rules are enabled:                                             *
    *                  - Bit 0 - Sunday                                                                                          *
    *                  - Bit 1 - Monday                                                                                          *
