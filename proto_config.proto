@@ -68,6 +68,16 @@ message ProtoConfig {
    * Status: In use [06.00 - LATEST]                                                                                            */
   repeated MeasurementType channel_types = 27;
 
+  /* Correlated channels.                                                                                                       *
+   * Array of bitmasks representing correlations for each channel.                                                              *
+   * Each element `correlated_channels[i]` is a bitmask for channel i+1.                                                        *
+   * Bit n (0-5) in the mask corresponds to channel n+1.                                                                        *
+   * Value 0 indicates an unassigned channel (active channels always correlate with themselves).                                *
+   * Trailing unassigned channels are omitted from the array.                                                                   *
+   * This field is only sent by the device.                                                                                     *
+   * Status: In use [07.03.00 - LATEST]                                                                                         */
+  repeated uint32 correlated_channels = 67;
+
   /* NvM status:                                                                                                                *
    *   - 1 - Defaults restored on CRC error: default sensor configuration restored due to the non-volatile memory configuration *
    *                                         data integrity failure                                                             *
@@ -156,6 +166,18 @@ message ProtoConfig {
    * This field is only sent by the user/server.                                                                                *
    * Status: In use [07.00.00 - LATEST] / Previously as output_control_state_request [06.13.00/06.21.00 - 06.xx.xx]             */
   repeated ProtoOutputControlState set_output_control_state_request = 58;
+
+  /* Device will enable the specific channels.                                                                                  *
+   * The rule configuration will be updated to reflect the enabled channels.                                                    *
+   * All measurement data will be erased, and the sensor will reset itself.                                                     *
+   * 1-byte bit mask, where each bit represents a specific channel's state (1 - enabled / 0 - disabled):                        *
+   * Channel: | 1 | 2 | 3 | 4 | 5 | 6 |                                                                                         *
+   * Bit:     | 0 | 1 | 2 | 3 | 4 | 5 |                                                                                         *
+   * Example: We have a three-channel sensor. If we send 5, the device will enable channels 1 and 3 and disable channel 2.      *
+   * At least one channel must be enabled. If there is a pair of major/minor channels, both must be enabled or disabled.        *
+   * This field is only sent by the user/server.                                                                                *
+   * Status: In use [07.03.00 - LATEST]                                                                                         */
+  uint32 enable_channels_request = 66;
 
   /* MEASUREMENTS CONFIGURATION ----------------------------------------------------------------------------------------------- */
 

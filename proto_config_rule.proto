@@ -45,7 +45,7 @@ syntax = "proto3";
  *   - STATIC_IAQ - [sIAQ] Static IAQ index. Resolution: 1sIAQ. Range: [0:10000]                                                *
  *   - CO2_EQUIVALENT - [ppm] Parts per million. Resolution: 1ppm. Range: [0:1000000]                                           *
  *   - BREATH_VOC - [ppm] Parts per million. Resolution: 1ppm. Range: [0:100000]                                                *
- *   - CELLULAR_GATEWAY - Not applicable                                                                                        *
+ *   - SHARED_MODEM - Not applicable                                                                                            *
  *   - PERCENTAGE - [%] Percentage. Resolution: 0.01%. Range: [0.00:100.00]                                                     *
  *   - VOLTAGE - [mV] Millivolt. Resolution: 0.1mV. Range: [0.0:100000.0]                                                       *
  *   - CURRENT - [mA] Milliampere. Resolution: 0.01mA. Range: [0.00:10000.00]                                                   *
@@ -57,7 +57,9 @@ syntax = "proto3";
  *   - PULSE_CNT_ACC_WIDE_MAJOR - [MNB] Number of megapulses. Resolution: 1 megapulse. Range: [0:999999]                        *
  *   - CURRENT_PRECISE - [mA] Milliampere. Resolution: 0.001mA. Range: [-4000.000:4000.000]                                     *
  *   - OUTPUT_CONTROL - Not applicable                                                                                          *
- *   - RESISTANCE - [Ω] Ohm. Resolution: 1Ω. Range: [0:1000000]                                                                 */
+ *   - RESISTANCE - [Ω] Ohm. Resolution: 1Ω. Range: [0:1000000]                                                                 *
+ *   - HEAT_INDEX - [°C] Celsius degree. Resolution: 0.1°C. Range: [-273.2:4000.0]                                              *
+ *   - DEW_POINT - [°C] Celsius degree. Resolution: 0.1°C. Range: [-100.0:100.0]                                                */
 
 /* Encoding R: used to set relative values in rules (e.g., differential threshold and hysteresis):                              *
  *   - TEMPERATURE - [°C] Celsius degree. Resolution: 0.1°C. Range: [0.1:4273.2]                                                *
@@ -90,7 +92,7 @@ syntax = "proto3";
  *   - STATIC_IAQ - [sIAQ] Static IAQ index. Resolution: 1sIAQ. Range: [1:10000]                                                *
  *   - CO2_EQUIVALENT - [ppm] Parts per million. Resolution: 1ppm. Range: [1:1000000]                                           *
  *   - BREATH_VOC - [ppm] Parts per million. Resolution: 1ppm. Range: [1:100000]                                                *
- *   - CELLULAR_GATEWAY - Not applicable                                                                                        *
+ *   - SHARED_MODEM - Not applicable                                                                                            *
  *   - PERCENTAGE - [%] Percentage. Resolution: 0.01%. Range: [0.01:100.00]                                                     *
  *   - VOLTAGE - [mV] Millivolt. Resolution: 0.1mV. Range: [0.1:100000.0]                                                       *
  *   - CURRENT - [mA] Milliampere. Resolution: 0.01mA. Range: [0.01:10000.00]                                                   *
@@ -102,7 +104,9 @@ syntax = "proto3";
  *   - PULSE_CNT_ACC_WIDE_MAJOR - [MNB] Number of megapulses. Resolution: 1 megapulse. Range: [1:999999]                        *
  *   - CURRENT_PRECISE - [mA] Milliampere. Resolution: 0.001mA. Range: [0.001:8000.000]                                         *
  *   - OUTPUT_CONTROL - Not applicable                                                                                          *
- *   - RESISTANCE - [Ω] Ohm. Resolution: 1Ω. Range: [1:1000000]                                                                 */
+ *   - RESISTANCE - [Ω] Ohm. Resolution: 1Ω. Range: [1:1000000]                                                                 *
+ *   - HEAT_INDEX - [°C] Celsius degree. Resolution: 0.1°C. Range: [0.1:4273.2]                                                 *
+ *   - DEW_POINT - [°C] Celsius degree. Resolution: 0.1°C. Range: [0.1:200.0]                                                   */
 
 /* Condition to be checked by the device. If the condition is true, an action is triggered.                                     */
 enum Condition {
@@ -110,7 +114,8 @@ enum Condition {
   /* Invalid value.                                                                                                             */
   CONDITION_UNSPECIFIED = 0;
 
-  /* The rule is disabled.                                                                                                      */
+  /* The rule is disabled.                                                                                                      *
+   * Status: In use [06.00 - LATEST]                                                                                            */
   CONDITION_DISABLED = 1;
 
   /* Upper threshold. 'Continuous' sensors only.                                                                                *
@@ -124,7 +129,8 @@ enum Condition {
    * parameter[3] - Number of measurements for trigger determination. E.g., parameter[3] equals 3, average value from three     *
    *                samples will be calculated and compared to the threshold value in average mode or the third consecutive     *
    *                sample above threshold will trigger action in consecutive mode. Range: [1:10].                              *
-   * parameter[4] - Type of measurement (as described in MeasurementType).                                                      */
+   * parameter[4] - Type of measurement (as described in MeasurementType).                                                      *
+   * Status: In use [06.00 - LATEST]                                                                                            */
   CONDITION_HIGH_THRESHOLD = 2;
 
   /* Lower threshold. 'Continuous' sensors only.                                                                                *
@@ -138,7 +144,8 @@ enum Condition {
    * parameter[3] - Number of measurements for trigger determination. E.g., parameter[3] equals 3, average value from three     *
    *                samples will be calculated and compared to the threshold value in average mode or the third consecutive     *
    *                sample below threshold will trigger action in consecutive mode. Range: [1:10].                              *
-   * parameter[4] - Type of measurement (as described in MeasurementType).                                                      */
+   * parameter[4] - Type of measurement (as described in MeasurementType).                                                      *
+   * Status: In use [06.00 - LATEST]                                                                                            */
   CONDITION_LOW_THRESHOLD = 3;
 
   /* Differential threshold. 'Continuous' sensors only.                                                                         *
@@ -152,11 +159,13 @@ enum Condition {
    * parameter[2] - Number of measurements for trigger determination. E.g., parameter[3] equals 3, average value from three     *
    *                samples will be calculated and compared to the threshold value in average mode or the third consecutive     *
    *                sample exceeding threshold will trigger action in consecutive mode. Range: [1:10].                          *
-   * parameter[3] - Type of measurement (as described in MeasurementType).                                                      */
+   * parameter[3] - Type of measurement (as described in MeasurementType).                                                      *
+   * Status: In use [06.00 - LATEST]                                                                                            */
   CONDITION_DIFF_THRESHOLD = 4;
 
   /* Change of binary sensor's state. 'Binary' sensors only.                                                                    *
-   * Each change of the binary sensor's state will trigger an action.                                                           */
+   * Each change of the binary sensor's state will trigger an action.                                                           *
+   * Status: In use [06.00 - LATEST]                                                                                            */
   CONDITION_BINARY_CHANGE_STATE = 5;
 
   /* Logic operator. Used for combining multiple rules into more complex conditions.                                            *
@@ -169,26 +178,33 @@ enum Condition {
    * parameter[3] - Rule action delay [s]. Specifies time delay between the rule activation and rule action being triggered.    *
    *                Range: [0:864000].                                                                                          *
    * parameter[4] - Rule return delay [s]. Specifies time delay between the rule deactivation and rule action being triggered.  *
-   *                Range: [0:864001]. Max parameter value disables action triggering on rule deactivation.                     */
+   *                Range: [0:864001]. Max parameter value disables action triggering on rule deactivation.                     *
+   * Status: In use [06.08.00 - LATEST]                                                                                         */
   CONDITION_LOGIC_OPERATOR = 6;
 
-  /* On measurement. 'Continous' sensors only.
+  /* On measurement. 'Continuous' sensors only.                                                                                 *
    * The basic function is to trigger communication after measurement if at least 60s have passed since the last one.           *
    * Transmission may occur every n-th measurement. Optionally dependency on the other rule can be configured, then, when all   *
    * conditions are met, transmission is triggered.                                                                             *
    * parameter[0] - Send every n-th measurement. This parameter specifies every which measurement transmission will be          *
    *                triggered if all other conditions are met. Range: [1:500]. If parameter[0] equals 1, transmission will      *
    *                occur after every measurement.                                                                              *
-   * parameter[1] - Optional. Rule selector (bitmask). Specifies which rule should be taken into account while determining      *
-   *                the measurement rule outcome.                                                                               *
-   * parameter[2] - Optional. Rule negation (bitmask). Specifies which of the rules selected in parameter[1] should be negated  *
-   *                before determining the measurement rule outcome.                                                            */
+   * parameter[1] - Rule selector (bitmask). Specifies which rules should be taken into account while determining               *
+   *                the measurement rule outcome; a value of 0 indicates that no rules are selected.                            *
+   * parameter[2] - Rule negation (bitmask). Specifies which of the rules selected in parameter[1] should be negated            *
+   *                before determining the measurement rule outcome; a value of 0 indicates that no rules are selected.         *
+   * Status: In use [06.10.00 - LATEST]                                                                                         */
   CONDITION_ON_MEASUREMENT = 7;
 
-  /* On sensor error. 'Continous' sensors only.                                                                                 *
+  /* On sensor error. 'Continuous' sensors only.                                                                                *
    * If the sensor returns an error code, an action will be triggered.                                                          *
-   * The rule becomes inactive when a correct measurement appears.                                                              */
-  CONDITION_ON_SENSOR_ERROR = 8;
+   * The rule becomes inactive when a correct measurement appears.                                                              *
+   * WARNING: In versions [07.02.00-07.02.03], the previous enum value (8) collided with                                        *
+   * CONDITION_HIGH_THRESHOLD_DUAL_CHANNEL (available since sensor v6), breaking API compatibility.                             *
+   * When updating sensors from versions [07.02.00-07.02.03] to a newer version, an automatic migration will occur.             *
+   * If this rule is set, its value will be updated to the new parameter value (11) directly in the sensor's memory.            *
+   * Status: In use [07.02.04 - LATEST] / Previously, the enum value was 8 [07.02.00-07.02.03]                                  */
+  CONDITION_ON_SENSOR_ERROR = 11;
 }
 
 /* Logic operators to be used for determining the outcome of rules with logic operator condition.                               */
@@ -197,10 +213,12 @@ enum LogicOperator {
   /* Invalid value.                                                                                                             */
   LOGIC_OPERATOR_UNSPECIFIED = 0;
 
-  /* Logic AND.                                                                                                                 */
+  /* Logic AND.                                                                                                                 *
+   * Status: In use [06.08.00 - LATEST]                                                                                         */
   LOGIC_OPERATOR_AND = 1;
 
-  /* Logic OR.                                                                                                                  */
+  /* Logic OR.                                                                                                                  *
+   * Status: In use [06.08.00 - LATEST]                                                                                         */
   LOGIC_OPERATOR_OR = 2;
 }
 
@@ -210,17 +228,21 @@ enum Action {
   /* Invalid value.                                                                                                             */
   ACTION_UNSPECIFIED = 0;
 
-  /* To trigger the transmission.                                                                                               */
+  /* To trigger the transmission.                                                                                               *
+   * Status: In use [06.00 - LATEST]                                                                                            */
   ACTION_TRIGGER_TRANSMISSION = 1;
 
-  /* To take no action. Possible for logic operator components.                                                                 */
+  /* To take no action. Possible for logic operator components.                                                                 *
+   * Status: In use [06.08.00 - LATEST]                                                                                         */
   ACTION_NO_ACTION = 2;
 
-  /* To trigger the transmission with ACK.                                                                                      */
+  /* To trigger the transmission with ACK.                                                                                      *
+   * Status: In use [06.10.00 - LATEST]                                                                                         */
   ACTION_TRIGGER_TRANSMISSION_WITH_ACK = 3;
 
   /* To change BLE advertising period mode to fast (with lower user-configured advertising interval).                           *
-   * Once the rule is deactived avertising period mode returns to previously configured value.                                  */
+   * Once the rule is deactived avertising period mode returns to previously configured value.                                  *
+   * Status: In use [06.13.00/06.21.00 - LATEST]                                                                                         */
   ACTION_FAST_ADVERTISING_MODE = 4;
 }
 
@@ -230,7 +252,8 @@ enum CalendarType {
   /* Invalid value.                                                                                                             */
   CALENDAR_TYPE_UNSPECIFIED = 0;
 
-  /* Calendar is inactive.                                                                                                      */
+  /* Calendar is inactive.                                                                                                      *
+   * Status: In use [06.08.00 - LATEST]                                                                                         */
   CALENDAR_TYPE_DISABLED = 1;
 
   /* Week calendar. Enables selcted rules on specified days of the week in specified time periods.                              *
@@ -244,7 +267,8 @@ enum CalendarType {
    * parameter[3] - Timezone - desired timezone for date comparison. Encoded as number (N) of 15 minutes offsets,               *
    *                for example: if N = 4, then  offset = 4 * 15min = 1h. I.e. timezone is UTC+1.                               *
    * Note: If 'From time' is bigger than 'To time' there are two periods when rules are enabled - from 00:00 to 'To time'       *
-   *       and from 'From time' to 23:59.                                                                                       */
+   *       and from 'From time' to 23:59.                                                                                       *
+   * Status: In use [06.08.00 - LATEST]                                                                                         */
   CALENDAR_TYPE_WEEK = 2;
 }
 

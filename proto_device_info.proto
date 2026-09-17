@@ -156,7 +156,7 @@ message ProtoModem
    *   - 4th item - sc_Cell_Id. Range: [1:268435456]. Unknown value: 0                                                          *
    *   - 5th item - sc_RSRP [dBm]. Range: [-140:-44]. Unknown value: 0                                                          *
    *   - 6th item - sc_RSRQ [dB]. Range: [-20:-3]. Unknown value: 0                                                             *
-   *   - 7th item - sc_RSSI [dBm]. Range: [-110:-3] Unknown value: 0                                                            *
+   *   - 7th item - sc_RSSI [dBm]. Range: [-120:-3] Unknown value: 0                                                            *
    *   - 8th item - sc_SINR [dB]. Range: [-10:30]. Unknown value: 31                                                            *
    *   - 9th item - sc_Band. Range: [see module supported bands]. The current serving cell band. Unknown value: -1              *
    *   - 10th item - sc_TAC. Range: [0:65536]. Unknown value: -1                                                                *
@@ -193,7 +193,7 @@ message ProtoModem
    *   - 4th item - sc_Cell_Id. Range: [1:268435456]. Unknown value: 0                                                          *
    *   - 5th item - sc_RSRP [dBm]. Range: [-140:-44]. Unknown value: 0                                                          *
    *   - 6th item - sc_RSRQ [dB]. Range: [-20:-3]. Unknown value: 0                                                             *
-   *   - 7th item - sc_RSSI [dBm]. Range: [-110:-3] Unknown value: 0                                                            *
+   *   - 7th item - sc_RSSI [dBm]. Range: [-120:-3] Unknown value: 0                                                            *
    *   - 8th item - sc_SINR [dB]. Range: [-10:30]. Unknown value: 31                                                            *
    *   - 9th item - sc_Band. Range: [see module supported bands]. The current serving cell band. Unknown value: -1              *
    *   - 10th item - sc_TAC. Range: [0:65536]. Unknown value: -1                                                                *
@@ -213,7 +213,7 @@ message ProtoModem
    * For shared modem client (4 parameters):                                                                                    *
    *   - 1st item - RSRP [dBm]. Range: [-140:-44]. Unknown value: 0                                                             *
    *   - 2nd item - RSRQ [dB]. Range: [-20:-3]. Unknown value: 0                                                                *
-   *   - 3rd item - RSSI [dBm]. Range: [-110:-3] Unknown value: 0                                                               *
+   *   - 3rd item - RSSI [dBm]. Range: [-120:-3] Unknown value: 0                                                               *
    *   - 4th item - SINR [dB]. Range: [-10:30]. Unknown value: 31                                                               *
    * Status: In use [06.00 - LATEST]                                                                                            */
   repeated sint32 parameters = 2;

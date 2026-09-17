@@ -212,4 +212,10 @@ enum MeasurementType {
 
   /* [Ω] - Ohm. Resolution: 1Ω. Range: [0:1000000]. Type: Continuous.                                                           */
   MEASUREMENT_TYPE_RESISTANCE = 43;
+
+  /* [°C] - Celsius degree. Heat index (perceived temperature). Resolution: 0.1°C. Range: [-273.2:4000.0]. Type: Continuous.    */
+  MEASUREMENT_TYPE_HEAT_INDEX = 44;
+
+  /* [°C] - Celsius degree. Dew point (condensation temperature). Resolution: 0.1°C. Range: [-100.0:100.0]. Type: Continuous.   */
+  MEASUREMENT_TYPE_DEW_POINT = 45;
 }
